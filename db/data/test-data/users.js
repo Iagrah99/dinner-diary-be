@@ -1,7 +1,7 @@
 module.exports = [
   {
-    email: 'mealplanner_mom@example.com',
-    username: 'MealPlannerMom',
+    email: 'mealplanner_mum@example.com',
+    username: 'MealPlannerMum',
     password: 'strong_password123',
   },
   {
