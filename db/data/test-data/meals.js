@@ -1,6 +1,5 @@
 module.exports = [
   {
-    meal_id: 1,
     name: 'Spaghetti Bolognese',
     ingredients: [
       'spaghetti',
@@ -13,7 +12,6 @@ module.exports = [
     created_by: 'MealPlannerMom',
   },
   {
-    meal_id: 2,
     name: 'Grilled Chicken Salad',
     ingredients: [
       'chicken breast',
@@ -26,14 +24,12 @@ module.exports = [
     created_by: 'FitnessFanatic',
   },
   {
-    meal_id: 3,
     name: 'Vegetable Stir-fry',
     ingredients: ['broccoli', 'carrots', 'bell peppers', 'soy sauce', 'tofu'],
     source: 'Vegan Delights Cookbook',
     created_by: 'MealPlannerMom',
   },
   {
-    meal_id: 4,
     name: 'Beef Tacos',
     ingredients: [
       'ground beef',
@@ -46,7 +42,6 @@ module.exports = [
     created_by: 'StudentFoodie',
   },
   {
-    meal_id: 5,
     name: 'Quinoa Salad',
     ingredients: [
       'quinoa',
@@ -59,14 +54,12 @@ module.exports = [
     created_by: 'FitnessFanatic',
   },
   {
-    meal_id: 6,
     name: 'Mac and Cheese',
     ingredients: ['macaroni', 'cheddar cheese', 'milk', 'butter', 'flour'],
     source: 'Classic Comfort Foods Cookbook',
     created_by: 'StudentFoodie',
   },
   {
-    meal_id: 7,
     name: 'Chicken Curry',
     ingredients: [
       'chicken breast',
@@ -79,14 +72,12 @@ module.exports = [
     created_by: 'MealPlannerMom',
   },
   {
-    meal_id: 8,
     name: 'Omelette',
     ingredients: ['eggs', 'cheese', 'spinach', 'onion', 'bell peppers'],
     source: 'breakfastrecipes.com',
     created_by: 'FitnessFanatic',
   },
   {
-    meal_id: 9,
     name: 'Fish Tacos',
     ingredients: ['white fish', 'tortillas', 'cabbage slaw', 'lime', 'avocado'],
     source: 'Seafood Specialties Cookbook',
