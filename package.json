@@ -4,17 +4,21 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "start": "node server.js",
+    "setup-dbs": "psql -f ./setup.sql",
+    "setup-test-dbs": "psql -f ./example.sql",
+    "seed": "PGDATABASE=weekly_meals_test node ./db/run-seed.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Ian Graham",
   "license": "ISC",
   "dependencies": {
     "express": "^4.21.0",
     "pg": "^8.13.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.7"
+    "nodemon": "^3.1.7",
+    "pg-format": "^1.0.4"
   }
 }

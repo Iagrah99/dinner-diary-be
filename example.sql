@@ -35,6 +35,3 @@ VALUES
 
 -- SELECT * FROM users;
 -- SELECT * FROM meals;
-
-SELECT * FROM meals
-WHERE name LIKE '% Cheese';

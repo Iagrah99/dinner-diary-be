@@ -9,7 +9,7 @@ module.exports = [
       'garlic',
     ],
     source: 'family recipe',
-    created_by: 'MealPlannerMom',
+    created_by: 'MealPlannerMum',
   },
   {
     name: 'Grilled Chicken Salad',
@@ -27,7 +27,7 @@ module.exports = [
     name: 'Vegetable Stir-fry',
     ingredients: ['broccoli', 'carrots', 'bell peppers', 'soy sauce', 'tofu'],
     source: 'Vegan Delights Cookbook',
-    created_by: 'MealPlannerMom',
+    created_by: 'MealPlannerMum',
   },
   {
     name: 'Beef Tacos',
@@ -69,7 +69,7 @@ module.exports = [
       'ginger',
     ],
     source: 'Indian Flavors Cookbook',
-    created_by: 'MealPlannerMom',
+    created_by: 'MealPlannerMum',
   },
   {
     name: 'Omelette',
