@@ -1,5 +1,6 @@
 const db = require('./connection.js');
 const format = require('pg-format');
+const bcrypt = require('bcrypt');
 
 async function seed({ usersData, mealsData }) {
   await db.query('DROP TABLE IF EXISTS meals');
@@ -32,6 +33,15 @@ async function seed({ usersData, mealsData }) {
     `
   );
 
+  const hashedUsersData = await Promise.all(
+    usersData.map(async (user) => {
+      const salt = await bcrypt.genSalt();
+      const hashedPassword = await bcrypt.hash(user.password, salt);
+
+      return [user.email, user.username, hashedPassword];
+    })
+  );
+
   const insertUsersQuery = format(
     `
       INSERT INTO users
@@ -39,9 +49,7 @@ async function seed({ usersData, mealsData }) {
       VALUES
       %L
     `,
-    usersData.map((user) => {
-      return [user.email, user.username, user.password];
-    })
+    hashedUsersData
   );
 
   await db.query(insertUsersQuery);
