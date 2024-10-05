@@ -34,4 +34,7 @@ VALUES
   ('StudentFoodie', 'Mac and Cheese', '{"macaroni", "cheddar cheese", "milk", "butter", "flour"}');
 
 -- SELECT * FROM users;
-SELECT * FROM meals;
+-- SELECT * FROM meals;
+
+SELECT * FROM meals
+WHERE name LIKE '% Cheese';
