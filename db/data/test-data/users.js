@@ -1,17 +1,17 @@
 module.exports = [
   {
-    email: 'mealplanner_mum@example.com',
-    username: 'MealPlannerMum',
-    password: 'strong_password123',
+    email: 'travel_chef@example.com',
+    username: 'TravelChef',
+    password: 'adventure_chef321',
   },
   {
-    email: 'fitness_fanatic@example.com',
-    username: 'FitnessFanatic',
-    password: 'secure_fitness123',
+    email: 'vegan_guru@example.com',
+    username: 'VeganGuru',
+    password: 'plant_based_life456',
   },
   {
-    email: 'student_foodie@example.com',
-    username: 'StudentFoodie',
-    password: 'unique_password123',
+    email: 'techie_cook@example.com',
+    username: 'TechieCook',
+    password: 'coding_and_cooking789',
   },
 ];
