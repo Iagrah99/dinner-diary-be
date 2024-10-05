@@ -1,0 +1,86 @@
+module.exports = [
+  {
+    name: 'Spaghetti Bolognese',
+    ingredients: [
+      'spaghetti',
+      'ground beef',
+      'tomato sauce',
+      'onion',
+      'garlic',
+    ],
+    source: 'family recipe',
+    created_by: 'MealPlannerMum',
+  },
+  {
+    name: 'Grilled Chicken Salad',
+    ingredients: [
+      'chicken breast',
+      'mixed greens',
+      'avocado',
+      'tomatoes',
+      'vinaigrette',
+    ],
+    source: 'fitnessblog.com',
+    created_by: 'FitnessFanatic',
+  },
+  {
+    name: 'Vegetable Stir-fry',
+    ingredients: ['broccoli', 'carrots', 'bell peppers', 'soy sauce', 'tofu'],
+    source: 'Vegan Delights Cookbook',
+    created_by: 'MealPlannerMum',
+  },
+  {
+    name: 'Beef Tacos',
+    ingredients: [
+      'ground beef',
+      'taco shells',
+      'cheddar cheese',
+      'lettuce',
+      'salsa',
+    ],
+    source: 'tacotime.com',
+    created_by: 'StudentFoodie',
+  },
+  {
+    name: 'Quinoa Salad',
+    ingredients: [
+      'quinoa',
+      'cucumber',
+      'cherry tomatoes',
+      'feta cheese',
+      'lemon dressing',
+    ],
+    source: 'nutritionapp.com',
+    created_by: 'FitnessFanatic',
+  },
+  {
+    name: 'Mac and Cheese',
+    ingredients: ['macaroni', 'cheddar cheese', 'milk', 'butter', 'flour'],
+    source: 'Classic Comfort Foods Cookbook',
+    created_by: 'StudentFoodie',
+  },
+  {
+    name: 'Chicken Curry',
+    ingredients: [
+      'chicken breast',
+      'coconut milk',
+      'curry powder',
+      'onions',
+      'ginger',
+    ],
+    source: 'Indian Flavors Cookbook',
+    created_by: 'MealPlannerMum',
+  },
+  {
+    name: 'Omelette',
+    ingredients: ['eggs', 'cheese', 'spinach', 'onion', 'bell peppers'],
+    source: 'breakfastrecipes.com',
+    created_by: 'FitnessFanatic',
+  },
+  {
+    name: 'Fish Tacos',
+    ingredients: ['white fish', 'tortillas', 'cabbage slaw', 'lime', 'avocado'],
+    source: 'Seafood Specialties Cookbook',
+    created_by: 'StudentFoodie',
+  },
+];

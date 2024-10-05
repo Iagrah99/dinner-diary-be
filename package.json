@@ -6,14 +6,15 @@
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js",
-    "setup-dbs": "psql -f ./setup.sql",
+    "setup-dbs": "psql -f ./db/setup.sql",
     "setup-test-dbs": "psql -f ./example.sql",
-    "seed": "PGDATABASE=weekly_meals_test node ./db/run-seed.js"
+    "seed": "PGDATABASE=weekly_meals node ./db/run-seed.js"
   },
   "keywords": [],
   "author": "Ian Graham",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^16.4.5",
     "express": "^4.21.0",
     "pg": "^8.13.0"
   },

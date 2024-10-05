@@ -1,9 +1,7 @@
 const db = require('./connection.js');
-const usersData = require('./data/test-data/users.js');
-const mealsData = require('./data/test-data/meals.js');
 const format = require('pg-format');
 
-async function seed() {
+async function seed({ usersData, mealsData }) {
   await db.query('DROP TABLE IF EXISTS meals');
   await db.query('DROP TABLE IF EXISTS users');
 
