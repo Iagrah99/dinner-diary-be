@@ -20,7 +20,9 @@
     "pg": "^8.13.0"
   },
   "devDependencies": {
+    "jest": "^29.7.0",
     "nodemon": "^3.1.7",
-    "pg-format": "^1.0.4"
+    "pg-format": "^1.0.4",
+    "supertest": "^7.0.0"
   }
 }

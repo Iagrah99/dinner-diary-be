@@ -10,6 +10,7 @@ module.exports = [
     ],
     source: 'family recipe',
     created_by: 'MealPlannerMum',
+    image: 'https://i.ibb.co/CzRDcC3/Spaghetti-Bolognese.png',
   },
   {
     name: 'Grilled Chicken Salad',
@@ -22,12 +23,14 @@ module.exports = [
     ],
     source: 'fitnessblog.com',
     created_by: 'FitnessFanatic',
+    image: 'https://i.ibb.co/QQcHt5V/Grilled-Chicken-Salad.png',
   },
   {
     name: 'Vegetable Stir-fry',
     ingredients: ['broccoli', 'carrots', 'bell peppers', 'soy sauce', 'tofu'],
     source: 'Vegan Delights Cookbook',
     created_by: 'MealPlannerMum',
+    image: 'https://i.ibb.co/VM6nV9d/Vegetable-Stir-fry.png',
   },
   {
     name: 'Beef Tacos',
@@ -40,6 +43,7 @@ module.exports = [
     ],
     source: 'tacotime.com',
     created_by: 'StudentFoodie',
+    image: 'https://i.ibb.co/xJyh66V/Beef-Tacos.png',
   },
   {
     name: 'Quinoa Salad',
@@ -52,12 +56,14 @@ module.exports = [
     ],
     source: 'nutritionapp.com',
     created_by: 'FitnessFanatic',
+    image: 'https://i.ibb.co/z7gXK7y/Quinoa-Salad.png',
   },
   {
     name: 'Mac and Cheese',
     ingredients: ['macaroni', 'cheddar cheese', 'milk', 'butter', 'flour'],
     source: 'Classic Comfort Foods Cookbook',
     created_by: 'StudentFoodie',
+    image: 'https://i.ibb.co/P1T9Lgc/Mac-And-Cheese.png',
   },
   {
     name: 'Chicken Curry',
@@ -70,17 +76,20 @@ module.exports = [
     ],
     source: 'Indian Flavors Cookbook',
     created_by: 'MealPlannerMum',
+    image: 'https://i.ibb.co/mFKYhgw/Chicken-Curry.png',
   },
   {
     name: 'Omelette',
     ingredients: ['eggs', 'cheese', 'spinach', 'onion', 'bell peppers'],
     source: 'breakfastrecipes.com',
     created_by: 'FitnessFanatic',
+    image: 'https://i.ibb.co/4JnN4J8/Omelette.png',
   },
   {
     name: 'Fish Tacos',
     ingredients: ['white fish', 'tortillas', 'cabbage slaw', 'lime', 'avocado'],
     source: 'Seafood Specialties Cookbook',
     created_by: 'StudentFoodie',
+    image: 'https://i.ibb.co/9vhxnYr/Fish-Tacos.png',
   },
 ];

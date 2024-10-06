@@ -14,6 +14,7 @@ async function seed({ usersData, mealsData }) {
         email VARCHAR(255) UNIQUE NOT NULL,
         username VARCHAR(50) UNIQUE NOT NULL,
         password VARCHAR(60) UNIQUE NOT NULL,
+        avatar VARCHAR(100) NOT NULL,
         date_joined DATE DEFAULT CURRENT_DATE 
       );
     `
@@ -27,7 +28,8 @@ async function seed({ usersData, mealsData }) {
         created_by VARCHAR(255) NOT NULL REFERENCES users(username) ON DELETE CASCADE ON UPDATE CASCADE,
         name VARCHAR(255) NOT NULL,
         ingredients TEXT[] NOT NULL,
-        source VARCHAR (255) NOT NULL,
+        source VARCHAR(255) NOT NULL,
+        image VARCHAR(100) NOT NULL,
         last_eaten DATE DEFAULT CURRENT_DATE
       );
     `
@@ -38,14 +40,14 @@ async function seed({ usersData, mealsData }) {
       const salt = await bcrypt.genSalt();
       const hashedPassword = await bcrypt.hash(user.password, salt);
 
-      return [user.email, user.username, hashedPassword];
+      return [user.email, user.username, hashedPassword, user.avatar];
     })
   );
 
   const insertUsersQuery = format(
     `
       INSERT INTO users
-        (email, username, password)
+        (email, username, password, avatar)
       VALUES
       %L
     `,
@@ -57,13 +59,19 @@ async function seed({ usersData, mealsData }) {
   const insertMealsQuery = format(
     `
       INSERT INTO meals
-        (created_by, name, ingredients, source)
+        (created_by, name, ingredients, source, image)
       VALUES
       %L
     `,
     mealsData.map((meal) => {
       const formattedIngredients = `{${meal.ingredients.join(',')}}`;
-      return [meal.created_by, meal.name, formattedIngredients, meal.source];
+      return [
+        meal.created_by,
+        meal.name,
+        formattedIngredients,
+        meal.source,
+        meal.image,
+      ];
     })
   );
 
