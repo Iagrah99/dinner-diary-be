@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon server.js",
-    "start": "node server.js",
+    "dev": "nodemon listen.js",
+    "test": "PGDATABASE=weekly_meals_test jest",
+    "start": "node listen.js",
     "setup-dbs": "psql -f ./db/setup.sql",
     "setup-test-dbs": "psql -f ./example.sql",
     "seed": "PGDATABASE=weekly_meals node ./db/run-seed.js"

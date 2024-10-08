@@ -1,7 +1,9 @@
 const express = require('express');
 
+const { getUsers } = require('./controllers/users.controllers.js');
+
 const app = express();
 
-const PORT = 3000;
+app.get('/api/users', getUsers);
 
-app.listen('3000', console.log(`Server running on port ${PORT}.`));
+module.exports = app;
