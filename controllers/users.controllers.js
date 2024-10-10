@@ -1,10 +1,20 @@
-const { fetchUsers } = require('../models/users.models.js');
+const { fetchUsers, fetchUserById } = require('../models/users.models.js');
 
-module.exports.getUsers = async (req, res) => {
+module.exports.getUsers = async (req, res, next) => {
   try {
     const users = await fetchUsers();
     res.status(200).send({ users });
   } catch (err) {
-    console.log(err);
+    next(err);
+  }
+};
+
+module.exports.getUserById = async (req, res, next) => {
+  const { user_id } = req.params;
+  try {
+    const fetchedUser = await fetchUserById(user_id);
+    res.status(200).send({ user: fetchedUser });
+  } catch (err) {
+    next(err);
   }
 };
