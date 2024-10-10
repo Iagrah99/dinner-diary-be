@@ -1,4 +1,9 @@
 const db = require('../db/connection.js');
+const bcrypt = require('bcrypt');
+const {
+  checkEmailExists,
+  checkUsernameExists,
+} = require('../utils/userUtils.js');
 
 module.exports.fetchUsers = async () => {
   const users = (await db.query('SELECT * FROM users')).rows;
@@ -21,4 +26,66 @@ module.exports.fetchUserById = async (user_id) => {
   }
 
   return user;
+};
+
+module.exports.postUser = async (user) => {
+  if (!user.email) {
+    return Promise.reject({
+      status: 400,
+      msg: 'Bad request. Please provide an email.',
+    });
+  }
+
+  if (!user.username) {
+    return Promise.reject({
+      status: 400,
+      msg: 'Bad request. Please provide a username.',
+    });
+  }
+
+  if (!user.password) {
+    return Promise.reject({
+      status: 400,
+      msg: 'Bad request. Please provide a password.',
+    });
+  }
+
+  const emailExists = await checkEmailExists(user.email);
+  const usernameExists = await checkUsernameExists(user.username);
+
+  if (emailExists) {
+    return Promise.reject({
+      status: 400,
+      msg: 'Bad request. A user with that email already exists.',
+    });
+  }
+
+  if (usernameExists) {
+    return Promise.reject({
+      status: 400,
+      msg: 'Bad request. A user with that username already exists.',
+    });
+  }
+
+  const salt = await bcrypt.genSalt();
+  const hashedPassword = await bcrypt.hash(user.password, salt);
+  const postedUser = (
+    await db.query(
+      `
+      INSERT INTO users
+        (email, username, password, avatar)
+      VALUES
+        ($1, $2, $3, $4)
+      RETURNING *;
+    `,
+      [
+        user.email,
+        user.username,
+        hashedPassword,
+        user.avatar || 'https://i.ibb.co/xmZqs9Y/default-avatar.png',
+      ]
+    )
+  ).rows[0];
+
+  return postedUser;
 };
