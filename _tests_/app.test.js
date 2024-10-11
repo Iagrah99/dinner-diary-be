@@ -273,3 +273,137 @@ describe('GET /api/meals/:meal_id', () => {
       });
   });
 });
+
+describe('POST /api/meals', () => {
+  test('status 201: should successfully add a new meal to the database and return the created meal. ', () => {
+    return request(app)
+      .post('/api/meals')
+      .send({
+        meal: {
+          name: 'Spaghetti Bolognese',
+          ingredients: [
+            'spaghetti',
+            'ground beef',
+            'tomato sauce',
+            'onion',
+            'garlic',
+          ],
+          source: 'BBC Good Food',
+          created_by: 'TravelChef',
+          image: 'https://i.ibb.co/CzRDcC3/Spaghetti-Bolognese.png',
+        },
+      })
+      .expect(201)
+      .then(({ body }) => {
+        const { meal } = body;
+        expect(meal).toMatchObject({
+          meal_id: 4,
+          name: 'Spaghetti Bolognese',
+          ingredients: [
+            'spaghetti',
+            'ground beef',
+            'tomato sauce',
+            'onion',
+            'garlic',
+          ],
+          source: 'BBC Good Food',
+          created_by: 'TravelChef',
+          image: 'https://i.ibb.co/CzRDcC3/Spaghetti-Bolognese.png',
+        });
+      });
+  });
+
+  test('status 201: should assign a default image for the meal if one is not specified by the user. ', () => {
+    return request(app)
+      .post('/api/meals')
+      .send({
+        meal: {
+          name: 'Spaghetti Bolognese',
+          ingredients: [
+            'spaghetti',
+            'ground beef',
+            'tomato sauce',
+            'onion',
+            'garlic',
+          ],
+          source: 'BBC Good Food',
+          created_by: 'TravelChef',
+          image: '',
+        },
+      })
+      .expect(201)
+      .then(({ body }) => {
+        const { meal } = body;
+        expect(meal.image).toBe('https://i.ibb.co/MDb6thH/Default-Meal.png');
+      });
+  });
+
+  test('status 400: should respond with a "Bad request" error if no meal name is given', () => {
+    return request(app)
+      .post('/api/meals')
+      .send({
+        meal: {
+          name: '',
+          ingredients: [
+            'spaghetti',
+            'ground beef',
+            'tomato sauce',
+            'onion',
+            'garlic',
+          ],
+          source: 'BBC Good Food',
+          created_by: 'TravelChef',
+          image: 'https://i.ibb.co/CzRDcC3/Spaghetti-Bolognese.png',
+        },
+      })
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe('Bad request. Please provide a meal name.');
+      });
+  });
+
+  test('status 400: should respond with a "Bad request" error if no ingredients given', () => {
+    return request(app)
+      .post('/api/meals')
+      .send({
+        meal: {
+          name: 'Spaghetti Bolognese',
+          ingredients: [],
+          source: 'BBC Good Food',
+          created_by: 'TravelChef',
+          image: 'https://i.ibb.co/CzRDcC3/Spaghetti-Bolognese.png',
+        },
+      })
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe("Bad request. Please provide the meal's ingredients.");
+      });
+  });
+
+  test('status 400: should respond with a "Bad request" error if no source is given', () => {
+    return request(app)
+      .post('/api/meals')
+      .send({
+        meal: {
+          name: 'Spaghetti Bolognese',
+          ingredients: [
+            'spaghetti',
+            'ground beef',
+            'tomato sauce',
+            'onion',
+            'garlic',
+          ],
+          source: '',
+          created_by: 'TravelChef',
+          image: 'https://i.ibb.co/CzRDcC3/Spaghetti-Bolognese.png',
+        },
+      })
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe('Bad request. Please provide a source for the meal.');
+      });
+  });
+});
