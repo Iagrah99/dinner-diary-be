@@ -206,3 +206,25 @@ describe('POST /api/users', () => {
       });
   });
 });
+
+describe('GET /api/meals', () => {
+  test('status 200: should respond with an array of meal objects with all of their properties.', () => {
+    return request(app)
+      .get('/api/meals')
+      .expect(200)
+      .then(({ body }) => {
+        const { meals } = body;
+        expect(Array.isArray(meals)).toBe(true);
+        meals.forEach((meal) => {
+          expect(meal).toMatchObject({
+            meal_id: expect.any(Number),
+            name: expect.any(String),
+            source: expect.any(String),
+            created_by: expect.any(String),
+            image: expect.any(String),
+          });
+          expect(Array.isArray(meal.ingredients)).toBe(true);
+        });
+      });
+  });
+});

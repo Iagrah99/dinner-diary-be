@@ -6,12 +6,16 @@ const {
   addUser,
 } = require('./controllers/users.controllers.js');
 
+const { getMeals } = require('./controllers/meals.controllers.js');
+
 const app = express();
 app.use(express.json());
 
 app.get('/api/users', getUsers);
 app.get('/api/users/:user_id', getUserById);
 app.post('/api/users', addUser);
+
+app.get('/api/meals', getMeals);
 
 // Error Handling Middleware
 
