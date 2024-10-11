@@ -10,7 +10,7 @@ afterAll(() => db.end());
 beforeEach(() => seed(data));
 
 describe('GET /api/users', () => {
-  test('status 200: should respond with an array of user objects with all their properties', () => {
+  test('status 200: should respond with an array of user objects with all their properties.', () => {
     return request(app)
       .get('/api/users')
       .expect(200)
@@ -30,7 +30,7 @@ describe('GET /api/users', () => {
 });
 
 describe('GET /api/users/user_id', () => {
-  test('status 200: should respond with the user object with the specified user_id', () => {
+  test('status 200: should respond with the user object with the specified user_id.', () => {
     return request(app)
       .get('/api/users/1')
       .expect(200)
@@ -45,7 +45,7 @@ describe('GET /api/users/user_id', () => {
       });
   });
 
-  test('status 400: should respond with a "Bad request" error when given an invalid user_id', () => {
+  test('status 400: should respond with a "Bad request" error when given an invalid user_id.', () => {
     return request(app)
       .get('/api/users/user1')
       .expect(400)
@@ -55,7 +55,7 @@ describe('GET /api/users/user_id', () => {
       });
   });
 
-  test('status 404: should respond with a "Not found" error when given a valid but non-existent user_id', () => {
+  test('status 404: should respond with a "Not found" error when given a valid but non-existent user_id.', () => {
     return request(app)
       .get('/api/users/50')
       .expect(404)
@@ -67,7 +67,7 @@ describe('GET /api/users/user_id', () => {
 });
 
 describe('POST /api/users', () => {
-  test('status 201: should successfully add a new user to the database and return the created user', () => {
+  test('status 201: should successfully add a new user to the database and return the created user.', () => {
     return request(app)
       .post('/api/users')
       .send({
@@ -225,6 +225,51 @@ describe('GET /api/meals', () => {
           });
           expect(Array.isArray(meal.ingredients)).toBe(true);
         });
+      });
+  });
+});
+
+describe('GET /api/meals/:meal_id', () => {
+  test('status 200: should respond with the requested meal object that is associated with the specified meal_id.', () => {
+    return request(app)
+      .get('/api/meals/1')
+      .expect(200)
+      .then(({ body }) => {
+        const { meal } = body;
+        expect(meal).toMatchObject({
+          meal_id: 1,
+          name: 'Lentil Soup',
+          ingredients: [
+            'lentils',
+            'carrots',
+            'celery',
+            'garlic',
+            'vegetable broth',
+          ],
+          source: 'HealthyHeartyMeals.com',
+          created_by: 'VeganGuru',
+          image: 'https://i.ibb.co/k0NdDHF/Lentil-Soup.png',
+        });
+      });
+  });
+
+  test('status 400: should respond with a "Bad request" error when given an invalid meal_id.', () => {
+    return request(app)
+      .get('/api/meals/meal1')
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe('Bad request. Please provide a valid meal_id.');
+      });
+  });
+
+  test('status 404: should respond with a "Not found" error when given a valid but non-existent meal_id.', () => {
+    return request(app)
+      .get('/api/meals/100')
+      .expect(404)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe('The meal with the specified meal_id was not found.');
       });
   });
 });
