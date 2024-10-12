@@ -89,3 +89,49 @@ module.exports.postUser = async (user) => {
 
   return postedUser;
 };
+
+module.exports.fetchUser = async (username, password) => {
+  if (!username) {
+    return Promise.reject({
+      status: 400,
+      msg: 'Please provide a username.',
+    });
+  }
+
+  if (!password) {
+    return Promise.reject({
+      status: 400,
+      msg: 'Please provide a password.',
+    });
+  }
+
+  const userInfo = (
+    await db.query('SELECT * FROM users WHERE username = $1', [username])
+  ).rows[0];
+
+  if (!userInfo) {
+    return Promise.reject({
+      status: 400,
+      msg: 'There is no registered user account that is associated with that username',
+    });
+  }
+
+  let userDetails = {};
+
+  if (await bcrypt.compare(password, userInfo.password)) {
+    userDetails = {
+      user_id: userInfo.user_id,
+      email: userInfo.email,
+      username: userInfo.username,
+      avatar: userInfo.avatar,
+      date_joined: userInfo.date_joined,
+    };
+  } else {
+    return Promise.reject({
+      status: 400,
+      msg: 'Incorrect password. Please try again!',
+    });
+  }
+
+  return userDetails;
+};

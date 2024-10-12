@@ -407,3 +407,94 @@ describe('POST /api/meals', () => {
       });
   });
 });
+
+describe('POST /api/users/login', () => {
+  test('status 201: should respond with the user object that was created with their user details if provided correct login credentials ', () => {
+    return request(app)
+      .post('/api/users/login')
+      .send({
+        user: {
+          username: 'TravelChef',
+          password: 'adventure_chef321',
+        },
+      })
+      .expect(201)
+      .then(({ body }) => {
+        const { user } = body;
+        console.log(user);
+        expect(user).toMatchObject({
+          user_id: 1,
+          email: 'travel_chef@example.com',
+          username: 'TravelChef',
+          avatar: 'https://i.ibb.co/xfwj2n4/test-avatar-2.png',
+          date_joined: '2024-10-11T23:00:00.000Z',
+        });
+      });
+  });
+
+  test('status 400: should respond with a "Bad request" error when the given username is not associated with a registered account.', () => {
+    return request(app)
+      .post('/api/users/login')
+      .send({
+        user: {
+          username: 'UnknownUser',
+          password: 'MyPassword123!',
+        },
+      })
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe(
+          'There is no registered user account that is associated with that username'
+        );
+      });
+  });
+
+  test('status 400: should respond with a "Bad request" error when given an incorrect password.', () => {
+    return request(app)
+      .post('/api/users/login')
+      .send({
+        user: {
+          username: 'TravelChef',
+          password: 'Incorrect123!',
+        },
+      })
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe('Incorrect password. Please try again!');
+      });
+  });
+
+  test('status 400: should respond with a "Bad request" error when no username is provided.', () => {
+    return request(app)
+      .post('/api/users/login')
+      .send({
+        user: {
+          username: '',
+          password: 'adventure_chef321',
+        },
+      })
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe('Please provide a username.');
+      });
+  });
+
+  test('status 400: should respond with a "Bad request" error when no password is provided.', () => {
+    return request(app)
+      .post('/api/users/login')
+      .send({
+        user: {
+          username: 'TravelChef',
+          password: '',
+        },
+      })
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe('Please provide a password.');
+      });
+  });
+});
