@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const {
   checkEmailExists,
   checkUsernameExists,
+  checkUserIdExists,
 } = require('../utils/userUtils.js');
 
 module.exports.fetchUsers = async () => {
@@ -134,4 +135,56 @@ module.exports.fetchUser = async (username, password) => {
   }
 
   return userDetails;
+};
+
+module.exports.patchUser = async (user, user_id) => {
+  const userExists = await checkUserIdExists(user_id);
+
+  if (!userExists) {
+    return Promise.reject({
+      status: 404,
+      msg: "The user with the specified user_id doesn't exist.",
+    });
+  }
+
+  let query = 'UPDATE users SET ';
+  const queryParams = [];
+  let queryIndex = 1;
+
+  if (user.username) {
+    const usernameExists = await checkUsernameExists(user.username);
+    if (!usernameExists) {
+      query += `username = $${queryIndex}, `;
+      queryParams.push(user.username);
+      queryIndex++;
+    } else {
+      return Promise.reject({
+        status: 400,
+        msg: 'That username is already taken.',
+      });
+    }
+  }
+
+  if (user.password) {
+    query += `password = $${queryIndex}, `;
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(user.password, salt);
+    queryParams.push(hashedPassword);
+    queryIndex++;
+  }
+
+  if (user.avatar) {
+    query += `avatar = $${queryIndex}, `;
+    queryParams.push(user.avatar);
+    queryIndex++;
+  }
+
+  query = query.slice(0, -2);
+
+  query += ` WHERE user_id = $${queryIndex} RETURNING *;`;
+  queryParams.push(user_id);
+
+  const updatedUser = (await db.query(query, queryParams)).rows[0];
+
+  return updatedUser;
 };

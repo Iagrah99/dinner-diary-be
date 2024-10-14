@@ -17,3 +17,12 @@ module.exports.checkUsernameExists = async (username) => {
 
   return usernameExistsQuery.rowCount > 0;
 };
+
+module.exports.checkUserIdExists = async (user_id) => {
+  const userIdExistsQuery = await db.query(
+    'SELECT user_id FROM users WHERE user_id = $1',
+    [user_id]
+  );
+
+  return userIdExistsQuery.rowCount > 0;
+};

@@ -3,6 +3,7 @@ const {
   fetchUserById,
   postUser,
   fetchUser,
+  patchUser,
 } = require('../models/users.models.js');
 
 module.exports.getUsers = async (req, res, next) => {
@@ -39,6 +40,17 @@ module.exports.loginUser = async (req, res, next) => {
   try {
     const fetchedUser = await fetchUser(user.username, user.password);
     res.status(201).send({ user: fetchedUser });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.updateUser = async (req, res, next) => {
+  const { user } = req.body;
+  const { user_id } = req.params;
+  try {
+    const updatedUser = await patchUser(user, user_id);
+    res.status(200).send({ user: updatedUser });
   } catch (err) {
     next(err);
   }

@@ -5,6 +5,7 @@ const {
   getUserById,
   addUser,
   loginUser,
+  updateUser,
 } = require('./controllers/users.controllers.js');
 
 const {
@@ -20,6 +21,7 @@ app.get('/api/users', getUsers);
 app.get('/api/users/:user_id', getUserById);
 app.post('/api/users', addUser);
 app.post('/api/users/login', loginUser);
+app.patch('/api/users/:user_id', updateUser);
 
 app.get('/api/meals', getMeals);
 app.get('/api/meals/:meal_id', getMealById);

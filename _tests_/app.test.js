@@ -29,7 +29,7 @@ describe('GET /api/users', () => {
   });
 });
 
-describe('GET /api/users/user_id', () => {
+describe('GET /api/users/:user_id', () => {
   test('status 200: should respond with the user object with the specified user_id.', () => {
     return request(app)
       .get('/api/users/1')
@@ -421,13 +421,12 @@ describe('POST /api/users/login', () => {
       .expect(201)
       .then(({ body }) => {
         const { user } = body;
-        console.log(user);
         expect(user).toMatchObject({
           user_id: 1,
           email: 'travel_chef@example.com',
           username: 'TravelChef',
           avatar: 'https://i.ibb.co/xfwj2n4/test-avatar-2.png',
-          date_joined: '2024-10-11T23:00:00.000Z',
+          date_joined: '2024-10-13T23:00:00.000Z',
         });
       });
   });
@@ -495,6 +494,107 @@ describe('POST /api/users/login', () => {
       .then(({ body }) => {
         const { msg } = body;
         expect(msg).toBe('Please provide a password.');
+      });
+  });
+});
+
+describe('PATCH /api/users/:user_id', () => {
+  test("status 200: should successfully update the user's username, leaving the other properties unchanged.", () => {
+    return request(app)
+      .patch('/api/users/1')
+      .send({
+        user: {
+          username: 'TravelCook',
+        },
+      })
+      .expect(200)
+      .then(({ body }) => {
+        const { user } = body;
+        expect(user).toMatchObject({
+          user_id: 1,
+          username: 'TravelCook',
+          email: 'travel_chef@example.com',
+          avatar: 'https://i.ibb.co/xfwj2n4/test-avatar-2.png',
+          date_joined: '2024-10-13T23:00:00.000Z',
+        });
+      });
+  });
+
+  test("status 200: should successfully update the user's password, leaving the other properties unchanged.", () => {
+    return request(app)
+      .patch('/api/users/1')
+      .send({
+        user: {
+          password: 'adventure_cook123',
+        },
+      })
+      .expect(200)
+      .then(({ body }) => {
+        const { user } = body;
+        return bcrypt
+          .compare('adventure_cook123', user.password)
+          .then((passwordMatches) => {
+            expect(passwordMatches).toBe(true);
+            expect(user).toMatchObject({
+              user_id: 1,
+              email: 'travel_chef@example.com',
+              username: 'TravelChef',
+              avatar: 'https://i.ibb.co/xfwj2n4/test-avatar-2.png',
+              date_joined: '2024-10-13T23:00:00.000Z',
+            });
+            expect(user.password).not.toBe('adventure_cook123');
+          });
+      });
+  });
+
+  test("status 200: should successfully update the user's avatar, leaving the other properties unchanged.", () => {
+    return request(app)
+      .patch('/api/users/1')
+      .send({
+        user: {
+          avatar: 'https://i.ibb.co/ggVSV42/Travel-Chef.png',
+        },
+      })
+      .expect(200)
+      .then(({ body }) => {
+        const { user } = body;
+        expect(user).toMatchObject({
+          user_id: 1,
+          email: 'travel_chef@example.com',
+          username: 'TravelChef',
+          avatar: 'https://i.ibb.co/ggVSV42/Travel-Chef.png',
+          date_joined: '2024-10-13T23:00:00.000Z',
+        });
+      });
+  });
+
+  test('status 400: should respond with a "Bad request" error if the new username is already taken. ', () => {
+    return request(app)
+      .patch('/api/users/1')
+      .send({
+        user: {
+          username: 'VeganGuru',
+        },
+      })
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe('That username is already taken.');
+      });
+  });
+
+  test('status 404: should respond with a "Not found" error when given a valid but non-existent user_id.', () => {
+    return request(app)
+      .patch('/api/users/100')
+      .send({
+        user: {
+          username: 'NewUsername100',
+        },
+      })
+      .expect(404)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe("The user with the specified user_id doesn't exist.");
       });
   });
 });
