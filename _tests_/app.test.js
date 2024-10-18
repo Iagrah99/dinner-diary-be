@@ -61,7 +61,7 @@ describe('GET /api/users/:user_id', () => {
       .expect(404)
       .then(({ body }) => {
         const { msg } = body;
-        expect(msg).toBe('The user with the specified user_id was not found.');
+        expect(msg).toBe('The user with the specified user_id does not exist.');
       });
   });
 });
@@ -128,7 +128,7 @@ describe('POST /api/users', () => {
       .expect(400)
       .then(({ body }) => {
         const { msg } = body;
-        expect(msg).toBe('Bad request. A user with that email already exists.');
+        expect(msg).toBe('A user with that email already exists.');
       });
   });
 
@@ -146,9 +146,7 @@ describe('POST /api/users', () => {
       .expect(400)
       .then(({ body }) => {
         const { msg } = body;
-        expect(msg).toBe(
-          'Bad request. A user with that username already exists.'
-        );
+        expect(msg).toBe('A user with that username already exists.');
       });
   });
 
@@ -166,7 +164,7 @@ describe('POST /api/users', () => {
       .expect(400)
       .then(({ body }) => {
         const { msg } = body;
-        expect(msg).toBe('Bad request. Please provide an email.');
+        expect(msg).toBe('Please provide an email.');
       });
   });
 
@@ -184,7 +182,7 @@ describe('POST /api/users', () => {
       .expect(400)
       .then(({ body }) => {
         const { msg } = body;
-        expect(msg).toBe('Bad request. Please provide a username.');
+        expect(msg).toBe('Please provide a username.');
       });
   });
 
@@ -202,7 +200,7 @@ describe('POST /api/users', () => {
       .expect(400)
       .then(({ body }) => {
         const { msg } = body;
-        expect(msg).toBe('Bad request. Please provide a password.');
+        expect(msg).toBe('Please provide a password.');
       });
   });
 });
@@ -360,7 +358,7 @@ describe('POST /api/meals', () => {
       .expect(400)
       .then(({ body }) => {
         const { msg } = body;
-        expect(msg).toBe('Bad request. Please provide a meal name.');
+        expect(msg).toBe('Please provide a meal name.');
       });
   });
 
@@ -379,7 +377,7 @@ describe('POST /api/meals', () => {
       .expect(400)
       .then(({ body }) => {
         const { msg } = body;
-        expect(msg).toBe("Bad request. Please provide the meal's ingredients.");
+        expect(msg).toBe("Please provide the meal's ingredients.");
       });
   });
 
@@ -404,7 +402,7 @@ describe('POST /api/meals', () => {
       .expect(400)
       .then(({ body }) => {
         const { msg } = body;
-        expect(msg).toBe('Bad request. Please provide a source for the meal.');
+        expect(msg).toBe('Please provide a source for the meal.');
       });
   });
 });
@@ -595,7 +593,7 @@ describe('PATCH /api/users/:user_id', () => {
       .expect(404)
       .then(({ body }) => {
         const { msg } = body;
-        expect(msg).toBe("The user with the specified user_id doesn't exist.");
+        expect(msg).toBe('The user with the specified user_id does not exist.');
       });
   });
 });
@@ -752,6 +750,59 @@ describe('PATCH /api/meals/:meal_id', () => {
       .then(({ body }) => {
         const { msg } = body;
         expect(msg).toBe('The meal with the specified meal_id was not found.');
+      });
+  });
+});
+
+describe('DELETE /api/users/:user_id', () => {
+  test('status 204: should successfully delete the user with the specified user_id when given the correct password.', () => {
+    return request(app)
+      .delete('/api/users/3')
+      .send({
+        user: {
+          password: 'coding_and_cooking789',
+        },
+      })
+      .expect(204);
+  });
+
+  test('status 400: should respond with a "Bad request" error when given an invalid password.', () => {
+    return request(app)
+      .delete('/api/users/3')
+      .send({
+        user: {
+          password: 'cooking_and_coding987',
+        },
+      })
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe('The password you provided is incorrect.');
+      });
+  });
+
+  test('status 400: should respond with a "Bad request" error when given an invalid user_id.', () => {
+    return request(app)
+      .delete('/api/users/asdf')
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe('Bad request. Please provide a valid user_id.');
+      });
+  });
+
+  test('status 404: should respond with a "Not found" error when given a valid but non-existent user_id.', () => {
+    return request(app)
+      .delete('/api/users/100')
+      .expect(404)
+      .send({
+        user: {
+          password: 'password_123',
+        },
+      })
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe('The user with the specified user_id does not exist.');
       });
   });
 });

@@ -25,21 +25,21 @@ module.exports.postMeal = async (meal) => {
   if (!meal.name) {
     return Promise.reject({
       status: 400,
-      msg: 'Bad request. Please provide a meal name.',
+      msg: 'Please provide a meal name.',
     });
   }
 
   if (!meal.ingredients.length) {
     return Promise.reject({
       status: 400,
-      msg: "Bad request. Please provide the meal's ingredients.",
+      msg: "Please provide the meal's ingredients.",
     });
   }
 
   if (!meal.source) {
     return Promise.reject({
       status: 400,
-      msg: 'Bad request. Please provide a source for the meal.',
+      msg: 'Please provide a source for the meal.',
     });
   }
 

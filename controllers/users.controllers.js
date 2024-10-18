@@ -4,6 +4,7 @@ const {
   postUser,
   fetchUser,
   patchUser,
+  deleteUser,
 } = require('../models/users.models.js');
 
 module.exports.getUsers = async (req, res, next) => {
@@ -51,6 +52,17 @@ module.exports.updateUser = async (req, res, next) => {
   try {
     const updatedUser = await patchUser(user, user_id);
     res.status(200).send({ user: updatedUser });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.removeUser = async (req, res, next) => {
+  const { user_id } = req.params;
+  const { user } = req.body;
+  try {
+    await deleteUser(user, user_id);
+    res.status(204).send();
   } catch (err) {
     next(err);
   }

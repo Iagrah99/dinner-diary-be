@@ -22,7 +22,7 @@ module.exports.fetchUserById = async (user_id) => {
   if (!user) {
     return Promise.reject({
       status: 404,
-      msg: 'The user with the specified user_id was not found.',
+      msg: 'The user with the specified user_id does not exist.',
     });
   }
 
@@ -33,21 +33,21 @@ module.exports.postUser = async (user) => {
   if (!user.email) {
     return Promise.reject({
       status: 400,
-      msg: 'Bad request. Please provide an email.',
+      msg: 'Please provide an email.',
     });
   }
 
   if (!user.username) {
     return Promise.reject({
       status: 400,
-      msg: 'Bad request. Please provide a username.',
+      msg: 'Please provide a username.',
     });
   }
 
   if (!user.password) {
     return Promise.reject({
       status: 400,
-      msg: 'Bad request. Please provide a password.',
+      msg: 'Please provide a password.',
     });
   }
 
@@ -57,14 +57,14 @@ module.exports.postUser = async (user) => {
   if (emailExists) {
     return Promise.reject({
       status: 400,
-      msg: 'Bad request. A user with that email already exists.',
+      msg: 'A user with that email already exists.',
     });
   }
 
   if (usernameExists) {
     return Promise.reject({
       status: 400,
-      msg: 'Bad request. A user with that username already exists.',
+      msg: 'A user with that username already exists.',
     });
   }
 
@@ -143,7 +143,7 @@ module.exports.patchUser = async (user, user_id) => {
   if (!userExists) {
     return Promise.reject({
       status: 404,
-      msg: "The user with the specified user_id doesn't exist.",
+      msg: 'The user with the specified user_id does not exist.',
     });
   }
 
@@ -187,4 +187,33 @@ module.exports.patchUser = async (user, user_id) => {
   const updatedUser = (await db.query(query, queryParams)).rows[0];
 
   return updatedUser;
+};
+
+module.exports.deleteUser = async (user, user_id) => {
+  // Check to see if the user exists before doing a password comparison
+  const userExists = await checkUserIdExists(user_id);
+
+  if (!userExists) {
+    return Promise.reject({
+      status: 404,
+      msg: 'The user with the specified user_id does not exist.',
+    });
+  }
+
+  const correctPassword = (
+    await db.query('SELECT password FROM users WHERE user_id = $1', [user_id])
+  ).rows[0].password;
+
+  const passwordMatches = await bcrypt.compare(user.password, correctPassword);
+
+  if (!passwordMatches) {
+    return Promise.reject({
+      status: 400,
+      msg: 'The password you provided is incorrect.',
+    });
+  }
+
+  await db.query('DELETE FROM users WHERE user_id = $1', [user_id]);
+
+  return;
 };
