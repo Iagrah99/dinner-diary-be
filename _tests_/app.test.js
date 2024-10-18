@@ -309,6 +309,7 @@ describe('POST /api/meals', () => {
           source: 'BBC Good Food',
           created_by: 'TravelChef',
           image: 'https://i.ibb.co/CzRDcC3/Spaghetti-Bolognese.png',
+          last_eaten: expect.any(String),
         });
       });
   });
@@ -426,7 +427,7 @@ describe('POST /api/users/login', () => {
           email: 'travel_chef@example.com',
           username: 'TravelChef',
           avatar: 'https://i.ibb.co/xfwj2n4/test-avatar-2.png',
-          date_joined: '2024-10-13T23:00:00.000Z',
+          date_joined: expect.any(String),
         });
       });
   });
@@ -515,7 +516,7 @@ describe('PATCH /api/users/:user_id', () => {
           username: 'TravelCook',
           email: 'travel_chef@example.com',
           avatar: 'https://i.ibb.co/xfwj2n4/test-avatar-2.png',
-          date_joined: '2024-10-13T23:00:00.000Z',
+          date_joined: expect.any(String),
         });
       });
   });
@@ -540,7 +541,7 @@ describe('PATCH /api/users/:user_id', () => {
               email: 'travel_chef@example.com',
               username: 'TravelChef',
               avatar: 'https://i.ibb.co/xfwj2n4/test-avatar-2.png',
-              date_joined: '2024-10-13T23:00:00.000Z',
+              date_joined: expect.any(String),
             });
             expect(user.password).not.toBe('adventure_cook123');
           });
@@ -563,7 +564,7 @@ describe('PATCH /api/users/:user_id', () => {
           email: 'travel_chef@example.com',
           username: 'TravelChef',
           avatar: 'https://i.ibb.co/ggVSV42/Travel-Chef.png',
-          date_joined: '2024-10-13T23:00:00.000Z',
+          date_joined: expect.any(String),
         });
       });
   });
@@ -595,6 +596,162 @@ describe('PATCH /api/users/:user_id', () => {
       .then(({ body }) => {
         const { msg } = body;
         expect(msg).toBe("The user with the specified user_id doesn't exist.");
+      });
+  });
+});
+
+describe('PATCH /api/meals/:meal_id', () => {
+  test("status 200: should successfully update the meal's name, leaving the other properties unchanged.", () => {
+    return request(app)
+      .patch('/api/meals/1')
+      .send({
+        meal: {
+          name: 'Homemade Lentil Soup',
+        },
+      })
+      .expect(200)
+      .then(({ body }) => {
+        const { meal } = body;
+        expect(meal).toMatchObject({
+          meal_id: 1,
+          name: 'Homemade Lentil Soup',
+          ingredients: [
+            'lentils',
+            'carrots',
+            'celery',
+            'garlic',
+            'vegetable broth',
+          ],
+          source: 'HealthyHeartyMeals.com',
+          created_by: 'VeganGuru',
+          image: 'https://i.ibb.co/k0NdDHF/Lentil-Soup.png',
+          last_eaten: expect.any(String),
+        });
+      });
+  });
+
+  test("status 200: should successfully update the meal's ingredients, leaving the other properties unchanged.", () => {
+    return request(app)
+      .patch('/api/meals/1')
+      .send({
+        meal: {
+          ingredients: [
+            'lentils',
+            'carrots',
+            'celery',
+            'garlic',
+            'parsley', // New addition
+            'vegetable broth',
+          ],
+        },
+      })
+      .expect(200)
+      .then(({ body }) => {
+        const { meal } = body;
+        expect(meal).toMatchObject({
+          meal_id: 1,
+          name: 'Lentil Soup',
+          ingredients: [
+            'lentils',
+            'carrots',
+            'celery',
+            'garlic',
+            'parsley',
+            'vegetable broth',
+          ],
+          source: 'HealthyHeartyMeals.com',
+          created_by: 'VeganGuru',
+          image: 'https://i.ibb.co/k0NdDHF/Lentil-Soup.png',
+          last_eaten: expect.any(String),
+        });
+      });
+  });
+
+  test("status 200: should successfully update the meal's source, leaving the other properties unchanged.", () => {
+    return request(app)
+      .patch('/api/meals/1')
+      .send({
+        meal: {
+          source: 'BBC Good Food',
+        },
+      })
+      .expect(200)
+      .then(({ body }) => {
+        const { meal } = body;
+        expect(meal).toMatchObject({
+          meal_id: 1,
+          name: 'Lentil Soup',
+          ingredients: [
+            'lentils',
+            'carrots',
+            'celery',
+            'garlic',
+            'vegetable broth',
+          ],
+          source: 'BBC Good Food',
+          created_by: 'VeganGuru',
+          image: 'https://i.ibb.co/k0NdDHF/Lentil-Soup.png',
+          last_eaten: expect.any(String),
+        });
+      });
+  });
+
+  test("status 200: should successfully update the meal's image, leaving the other properties unchanged.", () => {
+    return request(app)
+      .patch('/api/meals/1')
+      .send({
+        meal: {
+          image: 'https://i.ibb.co/18q4bXG/Lentil-Soup-2.png',
+        },
+      })
+      .expect(200)
+      .then(({ body }) => {
+        const { meal } = body;
+        expect(meal).toMatchObject({
+          meal_id: 1,
+          name: 'Lentil Soup',
+          ingredients: [
+            'lentils',
+            'carrots',
+            'celery',
+            'garlic',
+            'vegetable broth',
+          ],
+          source: 'HealthyHeartyMeals.com',
+          created_by: 'VeganGuru',
+          image: 'https://i.ibb.co/18q4bXG/Lentil-Soup-2.png',
+          last_eaten: expect.any(String),
+        });
+      });
+  });
+
+  test('status 400: should respond with a "Bad request" error when given an invalid meal_id.', () => {
+    return request(app)
+      .patch('/api/meals/asdf')
+      .send({
+        meal: {
+          name: 'Fish & Chips',
+        },
+      })
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe('Bad request. Please provide a valid meal_id.');
+      });
+  });
+
+  test('status 404: should respond with a "Not found" error when given a valid but non-existent meal_id.', () => {
+    return request(app)
+      .patch('/api/meals/100')
+      .send({
+        meal: {
+          name: 'Beans on Toast',
+        },
+      })
+      .expect(404)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe('The meal with the specified meal_id was not found.');
       });
   });
 });

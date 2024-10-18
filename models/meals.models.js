@@ -1,4 +1,5 @@
 const db = require('../db/connection.js');
+const { checkMealIdExists } = require('../utils/mealUtils.js');
 
 module.exports.fetchMeals = async () => {
   const meals = (await db.query('SELECT * FROM meals')).rows;
@@ -64,4 +65,53 @@ module.exports.postMeal = async (meal) => {
   ).rows[0];
 
   return addedMeal;
+};
+
+module.exports.patchMeal = async (meal, meal_id) => {
+  const mealIdExists = await checkMealIdExists(meal_id);
+
+  if (!mealIdExists) {
+    return Promise.reject({
+      status: 404,
+      msg: 'The meal with the specified meal_id was not found.',
+    });
+  }
+
+  let query = 'UPDATE meals SET ';
+  const queryParams = [];
+  let queryIndex = 1;
+
+  if (meal.name) {
+    query += `name = $${queryIndex}, `;
+    queryParams.push(meal.name);
+    queryIndex++;
+  }
+
+  if (meal.ingredients) {
+    query += `ingredients = $${queryIndex}, `;
+    const formattedIngredients = `{${meal.ingredients.join(',')}}`;
+    queryParams.push(formattedIngredients);
+    queryIndex++;
+  }
+
+  if (meal.source) {
+    query += `source = $${queryIndex}, `;
+    queryParams.push(meal.source);
+    queryIndex++;
+  }
+
+  if (meal.image) {
+    query += `image = $${queryIndex}, `;
+    queryParams.push(meal.image);
+    queryIndex++;
+  }
+
+  query = query.slice(0, -2);
+
+  query += ` WHERE meal_id = $${queryIndex} RETURNING *;`;
+  queryParams.push(meal_id);
+
+  const updatedMeal = (await db.query(query, queryParams)).rows[0];
+
+  return updatedMeal;
 };

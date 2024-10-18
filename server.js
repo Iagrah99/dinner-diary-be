@@ -12,6 +12,7 @@ const {
   getMeals,
   getMealById,
   addMeal,
+  updateMeal,
 } = require('./controllers/meals.controllers.js');
 
 const app = express();
@@ -26,6 +27,7 @@ app.patch('/api/users/:user_id', updateUser);
 app.get('/api/meals', getMeals);
 app.get('/api/meals/:meal_id', getMealById);
 app.post('/api/meals', addMeal);
+app.patch('/api/meals/:meal_id', updateMeal);
 
 // Error Handling Middleware
 
