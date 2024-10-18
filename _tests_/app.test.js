@@ -806,3 +806,29 @@ describe('DELETE /api/users/:user_id', () => {
       });
   });
 });
+
+describe('DELETE /api/meals/:meal_id', () => {
+  test('status 204: should successfully delete the meal with the specified meal_id.', () => {
+    return request(app).delete('/api/meals/3').expect(204);
+  });
+
+  test('status 400: should respond with a "Bad request" error when given an invaid meal_id.', () => {
+    return request(app)
+      .delete('/api/meals/abc')
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe('Bad request. Please provide a valid meal_id.');
+      });
+  });
+
+  test('status 404: should respond with a "Not found" error when given a valid but non-existent meal_id.', () => {
+    return request(app)
+      .delete('/api/meals/100')
+      .expect(404)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe('The meal with the specified meal_id does not exist.');
+      });
+  });
+});

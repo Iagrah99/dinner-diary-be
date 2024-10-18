@@ -3,6 +3,7 @@ const {
   fetchMealById,
   postMeal,
   patchMeal,
+  deleteMeal,
 } = require('../models/meals.models.js');
 
 module.exports.getMeals = async (req, res, next) => {
@@ -40,6 +41,17 @@ module.exports.updateMeal = async (req, res, next) => {
   try {
     const updatedMeal = await patchMeal(meal, meal_id);
     res.status(200).send({ meal: updatedMeal });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.removeMeal = async (req, res, next) => {
+  const { meal_id } = req.params;
+  console.log(meal_id);
+  try {
+    await deleteMeal(meal_id);
+    res.status(204).send();
   } catch (err) {
     next(err);
   }

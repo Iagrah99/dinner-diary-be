@@ -115,3 +115,18 @@ module.exports.patchMeal = async (meal, meal_id) => {
 
   return updatedMeal;
 };
+
+module.exports.deleteMeal = async (meal_id) => {
+  const deleteMealQuery = (
+    await db.query('DELETE FROM meals WHERE meal_id = $1', [meal_id])
+  ).rowCount;
+
+  if (!deleteMealQuery) {
+    return Promise.reject({
+      status: 404,
+      msg: 'The meal with the specified meal_id does not exist.',
+    });
+  }
+
+  return;
+};
