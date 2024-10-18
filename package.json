@@ -2,14 +2,15 @@
   "name": "weekly-meals-be",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "listen.js",
   "scripts": {
     "dev": "nodemon listen.js",
     "test": "PGDATABASE=weekly_meals_test jest",
     "start": "node listen.js",
     "setup-dbs": "psql -f ./db/setup.sql",
     "setup-test-dbs": "psql -f ./example.sql",
-    "seed": "PGDATABASE=weekly_meals node ./db/run-seed.js"
+    "seed": "PGDATABASE=weekly_meals node ./db/run-seed.js",
+    "seed-prod": "NODE_ENV=production npm run seed"
   },
   "keywords": [],
   "author": "Ian Graham",
