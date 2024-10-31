@@ -5,6 +5,7 @@ const {
   patchMeal,
   deleteMeal,
 } = require('../models/meals.models.js');
+const jwt = require('jsonwebtoken');
 
 module.exports.getMeals = async (req, res, next) => {
   try {
@@ -29,7 +30,13 @@ module.exports.addMeal = async (req, res, next) => {
   const { meal } = req.body;
   try {
     const addedMeal = await postMeal(meal);
-    res.status(201).send({ meal: addedMeal });
+    jwt.verify(req.token, 'secretkey', (err, authData) => {
+      if (err) {
+        res.status(403).send();
+      } else {
+        res.status(201).send({ meal: addedMeal, authData });
+      }
+    });
   } catch (err) {
     next(err);
   }
@@ -48,7 +55,6 @@ module.exports.updateMeal = async (req, res, next) => {
 
 module.exports.removeMeal = async (req, res, next) => {
   const { meal_id } = req.params;
-  console.log(meal_id);
   try {
     await deleteMeal(meal_id);
     res.status(204).send();

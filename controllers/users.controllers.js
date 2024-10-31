@@ -6,6 +6,7 @@ const {
   patchUser,
   deleteUser,
 } = require('../models/users.models.js');
+const jwt = require('jsonwebtoken');
 
 module.exports.getUsers = async (req, res, next) => {
   try {
@@ -40,7 +41,17 @@ module.exports.loginUser = async (req, res, next) => {
   const { user } = req.body;
   try {
     const fetchedUser = await fetchUser(user.username, user.password);
-    res.status(201).send({ user: fetchedUser });
+    jwt.sign(
+      { user: fetchedUser },
+      `${process.env.JWT_SECRET}`,
+      { expiresIn: '3 days' },
+      (err, token) => {
+        if (err) {
+          return next(err);
+        }
+        res.status(201).send({ user: fetchedUser, token });
+      }
+    );
   } catch (err) {
     next(err);
   }

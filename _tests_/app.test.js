@@ -4,6 +4,8 @@ const db = require('../db/connection');
 const data = require('../db/data/test-data/index');
 const seed = require('../db/seed');
 const bcrypt = require('bcrypt');
+const token =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfaWQiOjMsImVtYWlsIjoic3R1ZGVudF9mb29kaWVAZXhhbXBsZS5jb20iLCJ1c2VybmFtZSI6IlN0dWRlbnRGb29kaWUiLCJhdmF0YXIiOiJodHRwczovL2kuaWJiLmNvL04zRnFMTTUvYXZhdGFyLTIucG5nIiwiZGF0ZV9qb2luZWQiOiIyMDI0LTEwLTA5VDIzOjAwOjAwLjAwMFoifSwiaWF0IjoxNzMwMzk5MDg2LCJleHAiOjE3MzA2NTgyODZ9.8H4781Mfb3pfSY6kaZ-_qgkWVd1hhPeHt8MXg3akF-c';
 
 afterAll(() => db.end());
 
@@ -276,6 +278,7 @@ describe('POST /api/meals', () => {
   test('status 201: should successfully add a new meal to the database and return the created meal. ', () => {
     return request(app)
       .post('/api/meals')
+      .set('Authorization', `Bearer ${token}`)
       .send({
         meal: {
           name: 'Spaghetti Bolognese',
@@ -315,6 +318,7 @@ describe('POST /api/meals', () => {
   test('status 201: should assign a default image for the meal if one is not specified by the user. ', () => {
     return request(app)
       .post('/api/meals')
+      .set('Authorization', `Bearer ${token}`)
       .send({
         meal: {
           name: 'Spaghetti Bolognese',
@@ -340,6 +344,7 @@ describe('POST /api/meals', () => {
   test('status 400: should respond with a "Bad request" error if no meal name is given', () => {
     return request(app)
       .post('/api/meals')
+      .set('Authorization', `Bearer ${token}`)
       .send({
         meal: {
           name: '',
@@ -365,6 +370,7 @@ describe('POST /api/meals', () => {
   test('status 400: should respond with a "Bad request" error if no ingredients given', () => {
     return request(app)
       .post('/api/meals')
+      .set('Authorization', `Bearer ${token}`)
       .send({
         meal: {
           name: 'Spaghetti Bolognese',
@@ -384,6 +390,7 @@ describe('POST /api/meals', () => {
   test('status 400: should respond with a "Bad request" error if no source is given', () => {
     return request(app)
       .post('/api/meals')
+      .set('Authorization', `Bearer ${token}`)
       .send({
         meal: {
           name: 'Spaghetti Bolognese',
@@ -501,6 +508,7 @@ describe('PATCH /api/users/:user_id', () => {
   test("status 200: should successfully update the user's username, leaving the other properties unchanged.", () => {
     return request(app)
       .patch('/api/users/1')
+      .set('Authorization', `Bearer ${token}`)
       .send({
         user: {
           username: 'TravelCook',
@@ -522,6 +530,7 @@ describe('PATCH /api/users/:user_id', () => {
   test("status 200: should successfully update the user's password, leaving the other properties unchanged.", () => {
     return request(app)
       .patch('/api/users/1')
+      .set('Authorization', `Bearer ${token}`)
       .send({
         user: {
           password: 'adventure_cook123',
@@ -549,6 +558,7 @@ describe('PATCH /api/users/:user_id', () => {
   test("status 200: should successfully update the user's avatar, leaving the other properties unchanged.", () => {
     return request(app)
       .patch('/api/users/1')
+      .set('Authorization', `Bearer ${token}`)
       .send({
         user: {
           avatar: 'https://i.ibb.co/ggVSV42/Travel-Chef.png',
@@ -570,6 +580,7 @@ describe('PATCH /api/users/:user_id', () => {
   test('status 400: should respond with a "Bad request" error if the new username is already taken. ', () => {
     return request(app)
       .patch('/api/users/1')
+      .set('Authorization', `Bearer ${token}`)
       .send({
         user: {
           username: 'VeganGuru',
@@ -585,6 +596,7 @@ describe('PATCH /api/users/:user_id', () => {
   test('status 404: should respond with a "Not found" error when given a valid but non-existent user_id.', () => {
     return request(app)
       .patch('/api/users/100')
+      .set('Authorization', `Bearer ${token}`)
       .send({
         user: {
           username: 'NewUsername100',
@@ -602,6 +614,7 @@ describe('PATCH /api/meals/:meal_id', () => {
   test("status 200: should successfully update the meal's name, leaving the other properties unchanged.", () => {
     return request(app)
       .patch('/api/meals/1')
+      .set('Authorization', `Bearer ${token}`)
       .send({
         meal: {
           name: 'Homemade Lentil Soup',
@@ -631,6 +644,7 @@ describe('PATCH /api/meals/:meal_id', () => {
   test("status 200: should successfully update the meal's ingredients, leaving the other properties unchanged.", () => {
     return request(app)
       .patch('/api/meals/1')
+      .set('Authorization', `Bearer ${token}`)
       .send({
         meal: {
           ingredients: [
@@ -668,6 +682,7 @@ describe('PATCH /api/meals/:meal_id', () => {
   test("status 200: should successfully update the meal's source, leaving the other properties unchanged.", () => {
     return request(app)
       .patch('/api/meals/1')
+      .set('Authorization', `Bearer ${token}`)
       .send({
         meal: {
           source: 'BBC Good Food',
@@ -697,6 +712,7 @@ describe('PATCH /api/meals/:meal_id', () => {
   test("status 200: should successfully update the meal's image, leaving the other properties unchanged.", () => {
     return request(app)
       .patch('/api/meals/1')
+      .set('Authorization', `Bearer ${token}`)
       .send({
         meal: {
           image: 'https://i.ibb.co/18q4bXG/Lentil-Soup-2.png',
@@ -726,6 +742,7 @@ describe('PATCH /api/meals/:meal_id', () => {
   test('status 400: should respond with a "Bad request" error when given an invalid meal_id.', () => {
     return request(app)
       .patch('/api/meals/asdf')
+      .set('Authorization', `Bearer ${token}`)
       .send({
         meal: {
           name: 'Fish & Chips',
@@ -741,6 +758,7 @@ describe('PATCH /api/meals/:meal_id', () => {
   test('status 404: should respond with a "Not found" error when given a valid but non-existent meal_id.', () => {
     return request(app)
       .patch('/api/meals/100')
+      .set('Authorization', `Bearer ${token}`)
       .send({
         meal: {
           name: 'Beans on Toast',
@@ -758,6 +776,7 @@ describe('DELETE /api/users/:user_id', () => {
   test('status 204: should successfully delete the user with the specified user_id when given the correct password.', () => {
     return request(app)
       .delete('/api/users/3')
+      .set('Authorization', `Bearer ${token}`)
       .send({
         user: {
           password: 'coding_and_cooking789',
@@ -769,6 +788,7 @@ describe('DELETE /api/users/:user_id', () => {
   test('status 400: should respond with a "Bad request" error when given an invalid password.', () => {
     return request(app)
       .delete('/api/users/3')
+      .set('Authorization', `Bearer ${token}`)
       .send({
         user: {
           password: 'cooking_and_coding987',
@@ -784,6 +804,7 @@ describe('DELETE /api/users/:user_id', () => {
   test('status 400: should respond with a "Bad request" error when given an invalid user_id.', () => {
     return request(app)
       .delete('/api/users/asdf')
+      .set('Authorization', `Bearer ${token}`)
       .expect(400)
       .then(({ body }) => {
         const { msg } = body;
@@ -794,6 +815,7 @@ describe('DELETE /api/users/:user_id', () => {
   test('status 404: should respond with a "Not found" error when given a valid but non-existent user_id.', () => {
     return request(app)
       .delete('/api/users/100')
+      .set('Authorization', `Bearer ${token}`)
       .expect(404)
       .send({
         user: {
@@ -809,12 +831,16 @@ describe('DELETE /api/users/:user_id', () => {
 
 describe('DELETE /api/meals/:meal_id', () => {
   test('status 204: should successfully delete the meal with the specified meal_id.', () => {
-    return request(app).delete('/api/meals/3').expect(204);
+    return request(app)
+      .delete('/api/meals/3')
+      .set('Authorization', `Bearer ${token}`)
+      .expect(204);
   });
 
   test('status 400: should respond with a "Bad request" error when given an invaid meal_id.', () => {
     return request(app)
       .delete('/api/meals/abc')
+      .set('Authorization', `Bearer ${token}`)
       .expect(400)
       .then(({ body }) => {
         const { msg } = body;
@@ -825,6 +851,7 @@ describe('DELETE /api/meals/:meal_id', () => {
   test('status 404: should respond with a "Not found" error when given a valid but non-existent meal_id.', () => {
     return request(app)
       .delete('/api/meals/100')
+      .set('Authorization', `Bearer ${token}`)
       .expect(404)
       .then(({ body }) => {
         const { msg } = body;
