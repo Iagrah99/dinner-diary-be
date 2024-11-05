@@ -5,6 +5,7 @@ module.exports = [
     source: 'HealthyHeartyMeals.com',
     created_by: 'VeganGuru',
     image: 'https://i.ibb.co/k0NdDHF/Lentil-Soup.png',
+    rating: 3.5,
   },
   {
     name: 'Shrimp Scampi',
@@ -12,6 +13,7 @@ module.exports = [
     source: 'MediterraneanEats.com',
     created_by: 'TechieCook',
     image: 'https://i.ibb.co/LxdGtyn/Shrimp-Scampi.png',
+    rating: 5,
   },
   {
     name: 'Chicken Fajitas',
@@ -25,5 +27,6 @@ module.exports = [
     source: 'quickanddelicious.com',
     created_by: 'TravelChef',
     image: 'https://i.ibb.co/ggkB1qK/Chicken-Fajitas.png',
+    rating: 4,
   },
 ];

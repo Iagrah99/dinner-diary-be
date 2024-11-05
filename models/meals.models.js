@@ -43,15 +43,22 @@ module.exports.postMeal = async (meal) => {
     });
   }
 
+  if (!meal.rating) {
+    return Promise.reject({
+      status: 400,
+      msg: 'Please provide a rating for the meal.',
+    });
+  }
+
   const formattedIngredients = `{${meal.ingredients.join(',')}}`;
 
   const addedMeal = (
     await db.query(
       `
       INSERT INTO meals
-        (name, ingredients, source, created_by, image)
+        (name, ingredients, source, created_by, image, rating)
       VALUES
-        ($1, $2, $3, $4, $5)
+        ($1, $2, $3, $4, $5, $6)
       RETURNING *;
     `,
       [
@@ -60,6 +67,7 @@ module.exports.postMeal = async (meal) => {
         meal.source,
         meal.created_by,
         meal.image || 'https://i.ibb.co/MDb6thH/Default-Meal.png',
+        meal.rating,
       ]
     )
   ).rows[0];
@@ -103,6 +111,12 @@ module.exports.patchMeal = async (meal, meal_id) => {
   if (meal.image) {
     query += `image = $${queryIndex}, `;
     queryParams.push(meal.image);
+    queryIndex++;
+  }
+
+  if (meal.rating) {
+    query += `rating = $${queryIndex}, `;
+    queryParams.push(meal.rating);
     queryIndex++;
   }
 

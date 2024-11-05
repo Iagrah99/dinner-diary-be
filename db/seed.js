@@ -30,6 +30,7 @@ async function seed({ usersData, mealsData }) {
         ingredients TEXT[] NOT NULL,
         source VARCHAR(255) NOT NULL,
         image VARCHAR(100) NOT NULL,
+        rating numeric NOT NULL,
         last_eaten DATE DEFAULT CURRENT_DATE
       );
     `
@@ -59,7 +60,7 @@ async function seed({ usersData, mealsData }) {
   const insertMealsQuery = format(
     `
       INSERT INTO meals
-        (created_by, name, ingredients, source, image)
+        (created_by, name, ingredients, source, image, rating)
       VALUES
       %L
     `,
@@ -71,6 +72,7 @@ async function seed({ usersData, mealsData }) {
         formattedIngredients,
         meal.source,
         meal.image,
+        meal.rating,
       ];
     })
   );

@@ -4,12 +4,26 @@ const db = require('../db/connection');
 const data = require('../db/data/test-data/index');
 const seed = require('../db/seed');
 const bcrypt = require('bcrypt');
-const token =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfaWQiOjMsImVtYWlsIjoic3R1ZGVudF9mb29kaWVAZXhhbXBsZS5jb20iLCJ1c2VybmFtZSI6IlN0dWRlbnRGb29kaWUiLCJhdmF0YXIiOiJodHRwczovL2kuaWJiLmNvL04zRnFMTTUvYXZhdGFyLTIucG5nIiwiZGF0ZV9qb2luZWQiOiIyMDI0LTEwLTA5VDIzOjAwOjAwLjAwMFoifSwiaWF0IjoxNzMwMzk5MDg2LCJleHAiOjE3MzA2NTgyODZ9.8H4781Mfb3pfSY6kaZ-_qgkWVd1hhPeHt8MXg3akF-c';
+let token;
 
 afterAll(() => db.end());
 
-beforeEach(() => seed(data));
+beforeEach(async () => {
+  await seed(data); // Seed the database
+
+  // Log in and set the token for the current test
+  const response = await request(app)
+    .post('/api/users/login')
+    .send({
+      user: {
+        username: 'TravelChef',
+        password: 'adventure_chef321',
+      },
+    });
+
+  token = response.body.token; // Capture the token
+  console.log(token);
+});
 
 describe('GET /api/users', () => {
   test('status 200: should respond with an array of user objects with all their properties.', () => {
@@ -222,6 +236,7 @@ describe('GET /api/meals', () => {
             source: expect.any(String),
             created_by: expect.any(String),
             image: expect.any(String),
+            rating: expect.any(String),
           });
           expect(Array.isArray(meal.ingredients)).toBe(true);
         });
@@ -249,6 +264,7 @@ describe('GET /api/meals/:meal_id', () => {
           source: 'HealthyHeartyMeals.com',
           created_by: 'VeganGuru',
           image: 'https://i.ibb.co/k0NdDHF/Lentil-Soup.png',
+          rating: '3.5',
         });
       });
   });
@@ -292,6 +308,7 @@ describe('POST /api/meals', () => {
           source: 'BBC Good Food',
           created_by: 'TravelChef',
           image: 'https://i.ibb.co/CzRDcC3/Spaghetti-Bolognese.png',
+          rating: '4.5',
         },
       })
       .expect(201)
@@ -310,6 +327,7 @@ describe('POST /api/meals', () => {
           source: 'BBC Good Food',
           created_by: 'TravelChef',
           image: 'https://i.ibb.co/CzRDcC3/Spaghetti-Bolognese.png',
+          rating: '4.5',
           last_eaten: expect.any(String),
         });
       });
@@ -332,6 +350,7 @@ describe('POST /api/meals', () => {
           source: 'BBC Good Food',
           created_by: 'TravelChef',
           image: '',
+          rating: '4.5',
         },
       })
       .expect(201)
@@ -358,6 +377,7 @@ describe('POST /api/meals', () => {
           source: 'BBC Good Food',
           created_by: 'TravelChef',
           image: 'https://i.ibb.co/CzRDcC3/Spaghetti-Bolognese.png',
+          rating: '4.5',
         },
       })
       .expect(400)
@@ -378,6 +398,7 @@ describe('POST /api/meals', () => {
           source: 'BBC Good Food',
           created_by: 'TravelChef',
           image: 'https://i.ibb.co/CzRDcC3/Spaghetti-Bolognese.png',
+          rating: '4.5',
         },
       })
       .expect(400)
@@ -404,6 +425,7 @@ describe('POST /api/meals', () => {
           source: '',
           created_by: 'TravelChef',
           image: 'https://i.ibb.co/CzRDcC3/Spaghetti-Bolognese.png',
+          rating: 4.5,
         },
       })
       .expect(400)
@@ -636,6 +658,7 @@ describe('PATCH /api/meals/:meal_id', () => {
           source: 'HealthyHeartyMeals.com',
           created_by: 'VeganGuru',
           image: 'https://i.ibb.co/k0NdDHF/Lentil-Soup.png',
+          rating: '3.5',
           last_eaten: expect.any(String),
         });
       });
@@ -674,6 +697,7 @@ describe('PATCH /api/meals/:meal_id', () => {
           source: 'HealthyHeartyMeals.com',
           created_by: 'VeganGuru',
           image: 'https://i.ibb.co/k0NdDHF/Lentil-Soup.png',
+          rating: '3.5',
           last_eaten: expect.any(String),
         });
       });
@@ -704,6 +728,7 @@ describe('PATCH /api/meals/:meal_id', () => {
           source: 'BBC Good Food',
           created_by: 'VeganGuru',
           image: 'https://i.ibb.co/k0NdDHF/Lentil-Soup.png',
+          rating: '3.5',
           last_eaten: expect.any(String),
         });
       });
@@ -734,6 +759,7 @@ describe('PATCH /api/meals/:meal_id', () => {
           source: 'HealthyHeartyMeals.com',
           created_by: 'VeganGuru',
           image: 'https://i.ibb.co/18q4bXG/Lentil-Soup-2.png',
+          rating: '3.5',
           last_eaten: expect.any(String),
         });
       });

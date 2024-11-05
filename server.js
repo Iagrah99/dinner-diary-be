@@ -1,4 +1,6 @@
 const express = require('express');
+const cors = require('cors');
+require('dotenv').config();
 
 const {
   getUsers,
@@ -19,6 +21,7 @@ const {
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 app.get('/api/users', getUsers);
 app.get('/api/users/:user_id', getUserById);
