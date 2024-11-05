@@ -22,7 +22,6 @@ beforeEach(async () => {
     });
 
   token = response.body.token; // Capture the token
-  console.log(token);
 });
 
 describe('GET /api/users', () => {
@@ -425,13 +424,40 @@ describe('POST /api/meals', () => {
           source: '',
           created_by: 'TravelChef',
           image: 'https://i.ibb.co/CzRDcC3/Spaghetti-Bolognese.png',
-          rating: 4.5,
+          rating: '4.5',
         },
       })
       .expect(400)
       .then(({ body }) => {
         const { msg } = body;
         expect(msg).toBe('Please provide a source for the meal.');
+      });
+  });
+
+  test('status 400: should respond with a "Bad request" error if no rating is given', () => {
+    return request(app)
+      .post('/api/meals')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        meal: {
+          name: 'Spaghetti Bolognese',
+          ingredients: [
+            'spaghetti',
+            'ground beef',
+            'tomato sauce',
+            'onion',
+            'garlic',
+          ],
+          source: 'BBC Good Food',
+          created_by: 'TravelChef',
+          image: 'https://i.ibb.co/CzRDcC3/Spaghetti-Bolognese.png',
+          rating: '',
+        },
+      })
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe('Please provide a rating for the meal.');
       });
   });
 });
