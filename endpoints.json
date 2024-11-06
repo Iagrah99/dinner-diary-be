@@ -1,0 +1,256 @@
+{
+  "GET /api": {
+    "description": "responds with a json representation of all the available endpoints of the api"
+  },
+  "GET /api/meals": {
+    "description": "responds with an array of meal objects",
+    "queries": {},
+    "exampleResponse": {
+      "meals": [
+        {
+          "meal_id": 1,
+          "created_by": "MealPlannerMum",
+          "name": "Spaghetti Bolognese",
+          "ingredients": [
+            "spaghetti",
+            "ground beef",
+            "tomato sauce",
+            "onion",
+            "garlic"
+          ],
+          "source": "family recipe",
+          "image": "https://i.ibb.co/CzRDcC3/Spaghetti-Bolognese.png",
+          "last_eaten": "2024-10-09T23:00:00.000Z"
+        },
+        {
+          "meal_id": 2,
+          "created_by": "FitnessFanatic",
+          "name": "Grilled Chicken Salad",
+          "ingredients": [
+            "chicken breast",
+            "mixed greens",
+            "avocado",
+            "tomatoes",
+            "vinaigrette"
+          ],
+          "source": "fitnessblog.com",
+          "image": "https://i.ibb.co/QQcHt5V/Grilled-Chicken-Salad.png",
+          "last_eaten": "2024-10-09T23:00:00.000Z"
+        },
+        {
+          "meal_id": 3,
+          "created_by": "MealPlannerMum",
+          "name": "Vegetable Stir-fry",
+          "ingredients": [
+            "broccoli",
+            "carrots",
+            "bell peppers",
+            "soy sauce",
+            "tofu"
+          ],
+          "source": "Vegan Delights Cookbook",
+          "image": "https://i.ibb.co/VM6nV9d/Vegetable-Stir-fry.png",
+          "last_eaten": "2024-10-09T23:00:00.000Z"
+        }
+      ]
+    },
+    "GET /api/meals/:meal_id": {
+      "description": "responds with the requested meal object associated with the specified meal_id",
+      "queries": {},
+      "exampleResponse": {
+        "meal": {
+          "meal_id": 1,
+          "created_by": "MealPlannerMum",
+          "name": "Spaghetti Bolognese",
+          "ingredients": [
+            "spaghetti",
+            "ground beef",
+            "tomato sauce",
+            "onion",
+            "garlic"
+          ],
+          "source": "family recipe",
+          "image": "https://i.ibb.co/CzRDcC3/Spaghetti-Bolognese.png",
+          "last_eaten": "2024-10-09T23:00:00.000Z"
+        }
+      }
+    },
+    "GET /api/users": {
+      "description": "responds with an array of user objects",
+      "queries": {},
+      "exampleResponse": {
+        "users": [
+          {
+            "user_id": 1,
+            "email": "mealplanner_mum@example.com",
+            "username": "MealPlannerMum",
+            "password": "$2b$10$TO85HjAr/Rqt8cddJ3D.QOlF3hQN/YU6evzImWwf9vBXZZWTZ81y.",
+            "avatar": "https://i.ibb.co/tsDn7jg/avatar-1.png",
+            "date_joined": "2024-10-09T23:00:00.000Z"
+          },
+          {
+            "user_id": 2,
+            "email": "fitness_fanatic@example.com",
+            "username": "FitnessFanatic",
+            "password": "$2b$10$ltj5AKbEq7OQE6PTdSMB0.CzxiW5DxVzu2kTSI48QbOaJ8PwXbMx.",
+            "avatar": "https://i.ibb.co/N3FqLM5/avatar-2.png",
+            "date_joined": "2024-10-09T23:00:00.000Z"
+          },
+          {
+            "user_id": 3,
+            "email": "student_foodie@example.com",
+            "username": "StudentFoodie",
+            "password": "$2b$10$kK5o3mwTkbdBarQrq/Ngxe6bZEuj9FK27WlK3q8RyVrphs22rw3T.",
+            "avatar": "https://i.ibb.co/N3FqLM5/avatar-2.png",
+            "date_joined": "2024-10-09T23:00:00.000Z"
+          }
+        ]
+      }
+    },
+    "GET /api/users/:user_id": {
+      "description": "responds with the requested user object associated with the specified user_id",
+      "queries": {},
+      "exampleResponse": {
+        "user": {
+          "user_id": 1,
+          "email": "mealplanner_mum@example.com",
+          "username": "MealPlannerMum",
+          "avatar": "https://i.ibb.co/tsDn7jg/avatar-1.png"
+        }
+      }
+    }
+  },
+  "POST /api/meals": {
+    "description": "responds with the newly created meal object",
+    "queries": {},
+    "exampleRequest": {
+      "meal": {
+        "name": "Spaghetti Bolognese",
+        "ingredients": [
+          "spaghetti",
+          "ground beef",
+          "tomato sauce",
+          "onion",
+          "garlic"
+        ],
+        "source": "BBC Good Food",
+        "created_by": "TravelChef",
+        "image": "https://i.ibb.co/CzRDcC3/Spaghetti-Bolognese.png",
+        "rating": "4.5"
+      }
+    },
+    "exampleResponse": {
+      "meal_id": 4,
+      "name": "Spaghetti Bolognese",
+      "ingredients": [
+        "spaghetti",
+        "ground beef",
+        "tomato sauce",
+        "onion",
+        "garlic"
+      ],
+      "source": "BBC Good Food",
+      "created_by": "TravelChef",
+      "image": "https: //i.ibb.co/CzRDcC3/Spaghetti-Bolognese.png",
+      "rating": "4.5",
+      "last_eaten": "2024-11-06T00:00:00.000Z"
+    }
+  },
+  "POST /api/users": {
+    "description": "responds with the newly created user object",
+    "queries": {},
+    "exampleRequest": {
+      "user": {
+        "email": "mealplanner_mum@example.com",
+        "username": "MealPlannerMum",
+        "password": "strong_password123",
+        "avatar": "https: //i.ibb.co/tsDn7jg/avatar-1.png"
+      }
+    },
+    "exampleResponse": {
+      "user": {
+        "user_id": 4,
+        "email": "mealplanner_mum@example.com",
+        "username": "MealPlannerMum",
+        "password": "$2b$10$V0iiiNXTqQYKLx/fNrPpteI5jacNNKdI5jMjztDV4tJxHyILcIvsS",
+        "avatar": "https://i.ibb.co/tsDn7jg/avatar-1.png",
+        "date_joined": "2024-11-06T00:00:00.000Z"
+      }
+    }
+  },
+  "POST /api/users/login": {
+    "description": "responds with the logged in user object",
+    "queries": {},
+    "exampleRequest": {
+      "user": {
+        "username": "StudentFoodie",
+        "password": "unique_password123"
+      }
+    },
+    "exampleResponse": {
+      "user": {
+        "user_id": 3,
+        "email": "student_foodie@example.com",
+        "username": "StudentFoodie",
+        "avatar": "https://i.ibb.co/N3FqLM5/avatar-2.png",
+        "date_joined": "2024-10-09T23:00:00.000Z"
+      },
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7InVzZXJfaWQiOjMsImVtYWlsIjoic3R1ZGVudF9mb29kaWVAZXhhbXBsZS5jb20iLCJ1c2VybmFtZSI6IlN0dWRlbnRGb29kaWUiLCJhdmF0YXIiOiJodHRwczovL2kuaWJiLmNvL04zRnFMTTUvYXZhdGFyLTIucG5nIiwiZGF0ZV9qb2luZWQiOiIyMDI0LTEwLTA5VDIzOjAwOjAwLjAwMFoifSwiaWF0IjoxNzMwNDEwNzQ4LCJleHAiOjE3MzA2Njk5NDh9.ztkGyFopi71Gyfgz0GzGB_8xknkL39LgGMGkjcHwq1k"
+    }
+  },
+  "PATCH /api/meals/:meal_id": {
+    "description": "responds with the newly updated meal object",
+    "queries": {},
+    "exampleRequest": {
+      "meal": {
+        "name": "Homemade Lentil Soup"
+      }
+    },
+    "exampleResponse": {
+      "meal": {
+        "meal_id": 1,
+        "name": "Homemade Lentil Soup",
+        "ingredients": [
+          "lentils",
+          "carrots",
+          "celery",
+          "garlic",
+          "vegetable broth"
+        ],
+        "source": "HealthyHeartyMeals.com",
+        "created_by": "VeganGuru",
+        "image": "https://i.ibb.co/k0NdDHF/Lentil-Soup.png",
+        "rating": "3.5",
+        "last_eaten": "2024-11-06T00:00:00.000Z"
+      }
+    }
+  },
+  "PATCH /api/users/:user_id": {
+    "description": "responds with the newly updated user object",
+    "queries": {},
+    "exampleRequest": {
+      "user": {
+        "username": "TravelCook"
+      }
+    },
+    "exampleResponse": {
+      "user": {
+        "user_id": 1,
+        "username": "TravelCook",
+        "email": "travel_chef@example.com",
+        "avatar": "https://i.ibb.co/xfwj2n4/test-avatar-2.png",
+        "date_joined": "2024-11-06T00:00:00.000Z"
+      }
+    }
+  },
+  "DELETE /api/meals/:meal_id": {
+    "description": "deletes the meal associated with the specified meal_id",
+    "queries": {},
+    "exampleResponse": {}
+  },
+  "DELETE /api/users/:user_id": {
+    "description": "deletes the user associated with the specified user_id",
+    "queries": {},
+    "exampleResponse": {}
+  }
+}

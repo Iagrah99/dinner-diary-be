@@ -4,6 +4,7 @@ const db = require('../db/connection');
 const data = require('../db/data/test-data/index');
 const seed = require('../db/seed');
 const bcrypt = require('bcrypt');
+const endpoints = require('../endpoints.json');
 let token;
 
 afterAll(() => db.end());
@@ -22,6 +23,17 @@ beforeEach(async () => {
     });
 
   token = response.body.token; // Capture the token
+});
+
+describe('GET /api', () => {
+  test('status 200: should respond with a json representation of all the available endpoints of the api.', () => {
+    return request(app)
+      .get('/api')
+      .expect(200)
+      .then(({ body }) => {
+        expect(body).toEqual(endpoints);
+      });
+  });
 });
 
 describe('GET /api/users', () => {
