@@ -480,28 +480,6 @@ describe('POST /api/meals', () => {
       });
   });
 
-  test('status 400: should respond with a "Bad request" error if no ingredients given', () => {
-    return request(app)
-      .post('/api/meals')
-      .set('Authorization', `Bearer ${token}`)
-      .send({
-        meal: {
-          name: 'Spaghetti Bolognese',
-          ingredients: [],
-          source: 'BBC Good Food',
-          created_by: 'TravelChef',
-          image: 'https://i.ibb.co/CzRDcC3/Spaghetti-Bolognese.png',
-          rating: 4.5,
-          last_eaten: '2024-11-08',
-        },
-      })
-      .expect(400)
-      .then(({ body }) => {
-        const { msg } = body;
-        expect(msg).toBe("Please provide the meal's ingredients.");
-      });
-  });
-
   test('status 400: should respond with a "Bad request" error if no source is given', () => {
     return request(app)
       .post('/api/meals')

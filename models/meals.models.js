@@ -38,17 +38,11 @@ module.exports.fetchMealById = async (meal_id) => {
 };
 
 module.exports.postMeal = async (meal) => {
+  console.log(meal);
   if (!meal.name) {
     return Promise.reject({
       status: 400,
       msg: 'Please provide a meal name.',
-    });
-  }
-
-  if (!meal.ingredients.length) {
-    return Promise.reject({
-      status: 400,
-      msg: "Please provide the meal's ingredients.",
     });
   }
 

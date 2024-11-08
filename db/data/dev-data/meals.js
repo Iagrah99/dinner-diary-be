@@ -12,6 +12,7 @@ module.exports = [
     created_by: 'MealPlannerMum',
     image: 'https://i.ibb.co/CzRDcC3/Spaghetti-Bolognese.png',
     rating: 4,
+    last_eaten: '2024-11-03',
   },
   {
     name: 'Grilled Chicken Salad',
@@ -26,6 +27,7 @@ module.exports = [
     created_by: 'FitnessFanatic',
     image: 'https://i.ibb.co/QQcHt5V/Grilled-Chicken-Salad.png',
     rating: 5,
+    last_eaten: '2024-11-04',
   },
   {
     name: 'Vegetable Stir-fry',
@@ -34,6 +36,7 @@ module.exports = [
     created_by: 'MealPlannerMum',
     image: 'https://i.ibb.co/VM6nV9d/Vegetable-Stir-fry.png',
     rating: 4,
+    last_eaten: '2024-11-05',
   },
   {
     name: 'Beef Tacos',
@@ -48,6 +51,7 @@ module.exports = [
     created_by: 'StudentFoodie',
     image: 'https://i.ibb.co/xJyh66V/Beef-Tacos.png',
     rating: 3.5,
+    last_eaten: '2024-11-06',
   },
   {
     name: 'Quinoa Salad',
@@ -62,6 +66,7 @@ module.exports = [
     created_by: 'FitnessFanatic',
     image: 'https://i.ibb.co/z7gXK7y/Quinoa-Salad.png',
     rating: 3,
+    last_eaten: '2024-11-07',
   },
   {
     name: 'Mac and Cheese',
@@ -70,6 +75,7 @@ module.exports = [
     created_by: 'StudentFoodie',
     image: 'https://i.ibb.co/P1T9Lgc/Mac-And-Cheese.png',
     rating: 4,
+    last_eaten: '2024-11-08',
   },
   {
     name: 'Chicken Curry',
@@ -84,6 +90,7 @@ module.exports = [
     created_by: 'MealPlannerMum',
     image: 'https://i.ibb.co/mFKYhgw/Chicken-Curry.png',
     rating: 5,
+    last_eaten: '2024-11-09',
   },
   {
     name: 'Omelette',
@@ -92,6 +99,7 @@ module.exports = [
     created_by: 'FitnessFanatic',
     image: 'https://i.ibb.co/4JnN4J8/Omelette.png',
     rating: 4,
+    last_eaten: '2024-11-10',
   },
   {
     name: 'Fish Tacos',
@@ -100,5 +108,6 @@ module.exports = [
     created_by: 'StudentFoodie',
     image: 'https://i.ibb.co/9vhxnYr/Fish-Tacos.png',
     rating: 4,
+    last_eaten: '2024-11-11',
   },
 ];
