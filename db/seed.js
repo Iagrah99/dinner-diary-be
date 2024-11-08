@@ -15,7 +15,7 @@ async function seed({ usersData, mealsData }) {
         username VARCHAR(50) UNIQUE NOT NULL,
         password VARCHAR(60) UNIQUE NOT NULL,
         avatar VARCHAR(100) NOT NULL,
-        date_joined DATE DEFAULT CURRENT_DATE 
+        date_joined DATE NOT NULL 
       );
     `
   );
@@ -31,7 +31,7 @@ async function seed({ usersData, mealsData }) {
         source VARCHAR(255) NOT NULL,
         image VARCHAR(100) NOT NULL,
         rating real NOT NULL,
-        last_eaten DATE DEFAULT CURRENT_DATE
+        last_eaten DATE NOT NULL
       );
     `
   );
@@ -41,14 +41,20 @@ async function seed({ usersData, mealsData }) {
       const salt = await bcrypt.genSalt();
       const hashedPassword = await bcrypt.hash(user.password, salt);
 
-      return [user.email, user.username, hashedPassword, user.avatar];
+      return [
+        user.email,
+        user.username,
+        hashedPassword,
+        user.avatar,
+        user.date_joined,
+      ];
     })
   );
 
   const insertUsersQuery = format(
     `
       INSERT INTO users
-        (email, username, password, avatar)
+        (email, username, password, avatar, date_joined)
       VALUES
       %L
     `,
@@ -60,7 +66,7 @@ async function seed({ usersData, mealsData }) {
   const insertMealsQuery = format(
     `
       INSERT INTO meals
-        (created_by, name, ingredients, source, image, rating)
+        (created_by, name, ingredients, source, image, rating, last_eaten)
       VALUES
       %L
     `,
@@ -73,6 +79,7 @@ async function seed({ usersData, mealsData }) {
         meal.source,
         meal.image,
         meal.rating,
+        meal.last_eaten,
       ];
     })
   );

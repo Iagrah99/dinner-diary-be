@@ -50,6 +50,7 @@ describe('GET /api/users', () => {
             email: expect.any(String),
             username: expect.any(String),
             avatar: expect.any(String),
+            date_joined: expect.any(String),
           });
         });
       });
@@ -103,6 +104,7 @@ describe('POST /api/users', () => {
           username: 'MealPlannerMum',
           password: 'strong_password123',
           avatar: 'https://i.ibb.co/tsDn7jg/avatar-1.png',
+          date_joined: '2024-11-08',
         },
       })
       .expect(201)
@@ -117,6 +119,7 @@ describe('POST /api/users', () => {
               email: 'mealplanner_mum@example.com',
               username: 'MealPlannerMum',
               avatar: 'https://i.ibb.co/tsDn7jg/avatar-1.png',
+              date_joined: '2024-11-08T00:00:00.000Z',
             });
             expect(user.password).not.toBe('strong_password123');
           });
@@ -132,6 +135,7 @@ describe('POST /api/users', () => {
           username: 'MealPlannerMum',
           password: 'strong_password123',
           avatar: '',
+          date_joined: '2024-11-08',
         },
       })
       .expect(201)
@@ -150,6 +154,7 @@ describe('POST /api/users', () => {
           username: 'MealPlannerMum',
           password: 'strong_password123',
           avatar: 'https://i.ibb.co/tsDn7jg/avatar-1.png',
+          date_joined: '2024-11-08',
         },
       })
       .expect(400)
@@ -168,6 +173,7 @@ describe('POST /api/users', () => {
           username: 'TravelChef',
           password: 'strong_password123',
           avatar: 'https://i.ibb.co/tsDn7jg/avatar-1.png',
+          date_joined: '2024-11-08',
         },
       })
       .expect(400)
@@ -186,6 +192,7 @@ describe('POST /api/users', () => {
           username: 'MealPlannerMum',
           password: 'strong_password123',
           avatar: 'https://i.ibb.co/tsDn7jg/avatar-1.png',
+          date_joined: '2024-11-08',
         },
       })
       .expect(400)
@@ -204,6 +211,7 @@ describe('POST /api/users', () => {
           username: '',
           password: 'strong_password123',
           avatar: 'https://i.ibb.co/tsDn7jg/avatar-1.png',
+          date_joined: '2024-11-08',
         },
       })
       .expect(400)
@@ -222,6 +230,7 @@ describe('POST /api/users', () => {
           username: 'MealPlannerMum',
           password: '',
           avatar: 'https://i.ibb.co/tsDn7jg/avatar-1.png',
+          date_joined: '2024-11-08',
         },
       })
       .expect(400)
@@ -230,9 +239,28 @@ describe('POST /api/users', () => {
         expect(msg).toBe('Please provide a password.');
       });
   });
+
+  test('status 400: should respond with a "Bad request" error if no date_joined is provided.', () => {
+    return request(app)
+      .post('/api/users')
+      .send({
+        user: {
+          email: 'mealplanner_mum@example.com',
+          username: 'MealPlannerMum',
+          password: 'strong_password123',
+          avatar: 'https://i.ibb.co/tsDn7jg/avatar-1.png',
+          date_joined: '',
+        },
+      })
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe('No date_joined was provided for the user.');
+      });
+  });
 });
 
-describe.only('GET /api/meals', () => {
+describe('GET /api/meals', () => {
   test('status 200: should respond with an array of meal objects with all of their properties.', () => {
     return request(app)
       .get('/api/meals')
@@ -248,6 +276,7 @@ describe.only('GET /api/meals', () => {
             created_by: expect.any(String),
             image: expect.any(String),
             rating: expect.any(Number),
+            last_eaten: expect.any(String),
           });
           expect(Array.isArray(meal.ingredients)).toBe(true);
         });
@@ -370,6 +399,7 @@ describe('POST /api/meals', () => {
           created_by: 'TravelChef',
           image: 'https://i.ibb.co/CzRDcC3/Spaghetti-Bolognese.png',
           rating: 4.5,
+          last_eaten: '2024-11-08',
         },
       })
       .expect(201)
@@ -389,7 +419,7 @@ describe('POST /api/meals', () => {
           created_by: 'TravelChef',
           image: 'https://i.ibb.co/CzRDcC3/Spaghetti-Bolognese.png',
           rating: 4.5,
-          last_eaten: expect.any(String),
+          last_eaten: '2024-11-08T00:00:00.000Z',
         });
       });
   });
@@ -412,6 +442,7 @@ describe('POST /api/meals', () => {
           created_by: 'TravelChef',
           image: '',
           rating: 4.5,
+          last_eaten: '2024-11-08',
         },
       })
       .expect(201)
@@ -439,6 +470,7 @@ describe('POST /api/meals', () => {
           created_by: 'TravelChef',
           image: 'https://i.ibb.co/CzRDcC3/Spaghetti-Bolognese.png',
           rating: 4.5,
+          last_eaten: '2024-11-08',
         },
       })
       .expect(400)
@@ -460,6 +492,7 @@ describe('POST /api/meals', () => {
           created_by: 'TravelChef',
           image: 'https://i.ibb.co/CzRDcC3/Spaghetti-Bolognese.png',
           rating: 4.5,
+          last_eaten: '2024-11-08',
         },
       })
       .expect(400)
@@ -487,6 +520,7 @@ describe('POST /api/meals', () => {
           created_by: 'TravelChef',
           image: 'https://i.ibb.co/CzRDcC3/Spaghetti-Bolognese.png',
           rating: 4.5,
+          last_eaten: '2024-11-08',
         },
       })
       .expect(400)
@@ -513,13 +547,42 @@ describe('POST /api/meals', () => {
           source: 'BBC Good Food',
           created_by: 'TravelChef',
           image: 'https://i.ibb.co/CzRDcC3/Spaghetti-Bolognese.png',
-          rating: '',
+          rating: null,
+          last_eaten: '2024-11-08',
         },
       })
       .expect(400)
       .then(({ body }) => {
         const { msg } = body;
         expect(msg).toBe('Please provide a rating for the meal.');
+      });
+  });
+
+  test('status 400: should respond with a "Bad request" error if no last_eaten date is given', () => {
+    return request(app)
+      .post('/api/meals')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        meal: {
+          name: 'Spaghetti Bolognese',
+          ingredients: [
+            'spaghetti',
+            'ground beef',
+            'tomato sauce',
+            'onion',
+            'garlic',
+          ],
+          source: 'BBC Good Food',
+          created_by: 'TravelChef',
+          image: 'https://i.ibb.co/CzRDcC3/Spaghetti-Bolognese.png',
+          rating: 4.5,
+          last_eaten: '',
+        },
+      })
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe('Please provide a last_eaten date for the meal.');
       });
   });
 });
@@ -627,12 +690,13 @@ describe('PATCH /api/users/:user_id', () => {
       .expect(200)
       .then(({ body }) => {
         const { user } = body;
+        console.log(user.date_joined);
         expect(user).toMatchObject({
           user_id: 1,
           username: 'TravelCook',
           email: 'travel_chef@example.com',
           avatar: 'https://i.ibb.co/xfwj2n4/test-avatar-2.png',
-          date_joined: expect.any(String),
+          date_joined: '2024-11-08T00:00:00.000Z',
         });
       });
   });
@@ -658,7 +722,7 @@ describe('PATCH /api/users/:user_id', () => {
               email: 'travel_chef@example.com',
               username: 'TravelChef',
               avatar: 'https://i.ibb.co/xfwj2n4/test-avatar-2.png',
-              date_joined: expect.any(String),
+              date_joined: '2024-11-08T00:00:00.000Z',
             });
             expect(user.password).not.toBe('adventure_cook123');
           });
@@ -682,7 +746,7 @@ describe('PATCH /api/users/:user_id', () => {
           email: 'travel_chef@example.com',
           username: 'TravelChef',
           avatar: 'https://i.ibb.co/ggVSV42/Travel-Chef.png',
-          date_joined: expect.any(String),
+          date_joined: '2024-11-08T00:00:00.000Z',
         });
       });
   });
@@ -747,7 +811,7 @@ describe('PATCH /api/meals/:meal_id', () => {
           created_by: 'VeganGuru',
           image: 'https://i.ibb.co/k0NdDHF/Lentil-Soup.png',
           rating: 3.5,
-          last_eaten: expect.any(String),
+          last_eaten: '2024-11-08T00:00:00.000Z',
         });
       });
   });
@@ -786,7 +850,7 @@ describe('PATCH /api/meals/:meal_id', () => {
           created_by: 'VeganGuru',
           image: 'https://i.ibb.co/k0NdDHF/Lentil-Soup.png',
           rating: 3.5,
-          last_eaten: expect.any(String),
+          last_eaten: '2024-11-08T00:00:00.000Z',
         });
       });
   });
@@ -817,7 +881,7 @@ describe('PATCH /api/meals/:meal_id', () => {
           created_by: 'VeganGuru',
           image: 'https://i.ibb.co/k0NdDHF/Lentil-Soup.png',
           rating: 3.5,
-          last_eaten: expect.any(String),
+          last_eaten: '2024-11-08T00:00:00.000Z',
         });
       });
   });
@@ -848,7 +912,7 @@ describe('PATCH /api/meals/:meal_id', () => {
           created_by: 'VeganGuru',
           image: 'https://i.ibb.co/18q4bXG/Lentil-Soup-2.png',
           rating: 3.5,
-          last_eaten: expect.any(String),
+          last_eaten: '2024-11-08T00:00:00.000Z',
         });
       });
   });

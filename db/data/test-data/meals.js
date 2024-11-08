@@ -6,6 +6,7 @@ module.exports = [
     created_by: 'VeganGuru',
     image: 'https://i.ibb.co/k0NdDHF/Lentil-Soup.png',
     rating: 3.5,
+    last_eaten: '2024-11-08',
   },
   {
     name: 'Shrimp Scampi',
@@ -14,6 +15,7 @@ module.exports = [
     created_by: 'TechieCook',
     image: 'https://i.ibb.co/LxdGtyn/Shrimp-Scampi.png',
     rating: 5,
+    last_eaten: '2024-11-08',
   },
   {
     name: 'Chicken Fajitas',
@@ -28,5 +30,6 @@ module.exports = [
     created_by: 'TravelChef',
     image: 'https://i.ibb.co/ggkB1qK/Chicken-Fajitas.png',
     rating: 4,
+    last_eaten: '2024-11-08',
   },
 ];

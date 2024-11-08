@@ -51,6 +51,13 @@ module.exports.postUser = async (user) => {
     });
   }
 
+  if (!user.date_joined) {
+    return Promise.reject({
+      status: 400,
+      msg: 'No date_joined was provided for the user.',
+    });
+  }
+
   const emailExists = await checkEmailExists(user.email);
   const usernameExists = await checkUsernameExists(user.username);
 
@@ -74,9 +81,9 @@ module.exports.postUser = async (user) => {
     await db.query(
       `
       INSERT INTO users
-        (email, username, password, avatar)
+        (email, username, password, avatar, date_joined)
       VALUES
-        ($1, $2, $3, $4)
+        ($1, $2, $3, $4, $5)
       RETURNING *;
     `,
       [
@@ -84,6 +91,7 @@ module.exports.postUser = async (user) => {
         user.username,
         hashedPassword,
         user.avatar || 'https://i.ibb.co/xmZqs9Y/default-avatar.png',
+        user.date_joined,
       ]
     )
   ).rows[0];
