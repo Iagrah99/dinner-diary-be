@@ -38,7 +38,6 @@ module.exports.fetchMealById = async (meal_id) => {
 };
 
 module.exports.postMeal = async (meal) => {
-  console.log(meal);
   if (!meal.name) {
     return Promise.reject({
       status: 400,
