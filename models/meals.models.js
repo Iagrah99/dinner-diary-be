@@ -1,8 +1,24 @@
 const db = require('../db/connection.js');
 const { checkMealIdExists } = require('../utils/mealUtils.js');
 
-module.exports.fetchMeals = async () => {
-  const meals = (await db.query('SELECT * FROM meals')).rows;
+module.exports.fetchMeals = async (
+  sort_by = 'last_eaten',
+  order_by = 'ASC'
+) => {
+  const validSortByQueries = ['last_eaten', 'name', 'source', 'rating'];
+  const validOrderByQueries = ['ASC', 'DESC'];
+
+  if (!validSortByQueries.includes(sort_by)) {
+    return Promise.reject({ status: 400, msg: 'Invalid sort by query' });
+  }
+
+  if (!validOrderByQueries.includes(order_by)) {
+    return Promise.reject({ status: 400, msg: 'Invalid order by query' });
+  }
+
+  const meals = (
+    await db.query(`SELECT * FROM meals ORDER BY ${sort_by} ${order_by}`)
+  ).rows;
   return meals;
 };
 

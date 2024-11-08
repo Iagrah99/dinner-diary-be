@@ -232,7 +232,7 @@ describe('POST /api/users', () => {
   });
 });
 
-describe('GET /api/meals', () => {
+describe.only('GET /api/meals', () => {
   test('status 200: should respond with an array of meal objects with all of their properties.', () => {
     return request(app)
       .get('/api/meals')
@@ -247,10 +247,60 @@ describe('GET /api/meals', () => {
             source: expect.any(String),
             created_by: expect.any(String),
             image: expect.any(String),
-            rating: expect.any(String),
+            rating: expect.any(Number),
           });
           expect(Array.isArray(meal.ingredients)).toBe(true);
         });
+      });
+  });
+
+  test('status 200: should respond with an array of meal objects sorted by their date in descending order.', () => {
+    return request(app)
+      .get('/api/meals')
+      .expect(200)
+      .then(({ body }) => {
+        const { meals } = body;
+        expect(meals).toBeSortedBy('last_eaten', { ascending: true });
+      });
+  });
+
+  test('status 200: should sort meals by specified sort_by query', () => {
+    return request(app)
+      .get('/api/meals?sort_by=rating')
+      .expect(200)
+      .then(({ body }) => {
+        const { meals } = body;
+        expect(meals).toBeSortedBy('rating');
+      });
+  });
+
+  test('status 200: should order meals by the specified order_by query', () => {
+    return request(app)
+      .get('/api/meals?order_by=DESC')
+      .expect(200)
+      .then(({ body }) => {
+        const { meals } = body;
+        expect(meals).toBeSorted({ descending: true });
+      });
+  });
+
+  test('status 400: should respond with a "bad request" error when given an invalid sort_by query.', () => {
+    return request(app)
+      .get('/api/meals?sort_by=ingredients')
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe('Invalid sort by query');
+      });
+  });
+
+  test('status 400: should respond with a "bad request" error when given an invalid order_by query.', () => {
+    return request(app)
+      .get('/api/meals?order_by=something')
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe('Invalid order by query');
       });
   });
 });
@@ -275,7 +325,7 @@ describe('GET /api/meals/:meal_id', () => {
           source: 'HealthyHeartyMeals.com',
           created_by: 'VeganGuru',
           image: 'https://i.ibb.co/k0NdDHF/Lentil-Soup.png',
-          rating: '3.5',
+          rating: 3.5,
         });
       });
   });
@@ -319,7 +369,7 @@ describe('POST /api/meals', () => {
           source: 'BBC Good Food',
           created_by: 'TravelChef',
           image: 'https://i.ibb.co/CzRDcC3/Spaghetti-Bolognese.png',
-          rating: '4.5',
+          rating: 4.5,
         },
       })
       .expect(201)
@@ -338,7 +388,7 @@ describe('POST /api/meals', () => {
           source: 'BBC Good Food',
           created_by: 'TravelChef',
           image: 'https://i.ibb.co/CzRDcC3/Spaghetti-Bolognese.png',
-          rating: '4.5',
+          rating: 4.5,
           last_eaten: expect.any(String),
         });
       });
@@ -361,7 +411,7 @@ describe('POST /api/meals', () => {
           source: 'BBC Good Food',
           created_by: 'TravelChef',
           image: '',
-          rating: '4.5',
+          rating: 4.5,
         },
       })
       .expect(201)
@@ -388,7 +438,7 @@ describe('POST /api/meals', () => {
           source: 'BBC Good Food',
           created_by: 'TravelChef',
           image: 'https://i.ibb.co/CzRDcC3/Spaghetti-Bolognese.png',
-          rating: '4.5',
+          rating: 4.5,
         },
       })
       .expect(400)
@@ -409,7 +459,7 @@ describe('POST /api/meals', () => {
           source: 'BBC Good Food',
           created_by: 'TravelChef',
           image: 'https://i.ibb.co/CzRDcC3/Spaghetti-Bolognese.png',
-          rating: '4.5',
+          rating: 4.5,
         },
       })
       .expect(400)
@@ -436,7 +486,7 @@ describe('POST /api/meals', () => {
           source: '',
           created_by: 'TravelChef',
           image: 'https://i.ibb.co/CzRDcC3/Spaghetti-Bolognese.png',
-          rating: '4.5',
+          rating: 4.5,
         },
       })
       .expect(400)
@@ -696,7 +746,7 @@ describe('PATCH /api/meals/:meal_id', () => {
           source: 'HealthyHeartyMeals.com',
           created_by: 'VeganGuru',
           image: 'https://i.ibb.co/k0NdDHF/Lentil-Soup.png',
-          rating: '3.5',
+          rating: 3.5,
           last_eaten: expect.any(String),
         });
       });
@@ -735,7 +785,7 @@ describe('PATCH /api/meals/:meal_id', () => {
           source: 'HealthyHeartyMeals.com',
           created_by: 'VeganGuru',
           image: 'https://i.ibb.co/k0NdDHF/Lentil-Soup.png',
-          rating: '3.5',
+          rating: 3.5,
           last_eaten: expect.any(String),
         });
       });
@@ -766,7 +816,7 @@ describe('PATCH /api/meals/:meal_id', () => {
           source: 'BBC Good Food',
           created_by: 'VeganGuru',
           image: 'https://i.ibb.co/k0NdDHF/Lentil-Soup.png',
-          rating: '3.5',
+          rating: 3.5,
           last_eaten: expect.any(String),
         });
       });
@@ -797,7 +847,7 @@ describe('PATCH /api/meals/:meal_id', () => {
           source: 'HealthyHeartyMeals.com',
           created_by: 'VeganGuru',
           image: 'https://i.ibb.co/18q4bXG/Lentil-Soup-2.png',
-          rating: '3.5',
+          rating: 3.5,
           last_eaten: expect.any(String),
         });
       });

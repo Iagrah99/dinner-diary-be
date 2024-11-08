@@ -30,7 +30,7 @@ async function seed({ usersData, mealsData }) {
         ingredients TEXT[] NOT NULL,
         source VARCHAR(255) NOT NULL,
         image VARCHAR(100) NOT NULL,
-        rating numeric NOT NULL,
+        rating real NOT NULL,
         last_eaten DATE DEFAULT CURRENT_DATE
       );
     `

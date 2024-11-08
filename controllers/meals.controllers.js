@@ -8,8 +8,10 @@ const {
 const jwt = require('jsonwebtoken');
 
 module.exports.getMeals = async (req, res, next) => {
+  const { sort_by, order_by } = req.query;
+  console.log(order_by);
   try {
-    const meals = await fetchMeals();
+    const meals = await fetchMeals(sort_by, order_by);
     res.status(200).send({ meals });
   } catch (err) {
     next(err);
