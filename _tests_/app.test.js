@@ -94,10 +94,11 @@ describe('GET /api/users/:user_id', () => {
   });
 });
 
-describe.only('GET /api/users/:user_id/meals', () => {
+describe('GET /api/users/:user_id/meals', () => {
   test('status 200: should respond with an array of meals belonging to specified user.', () => {
     return request(app)
       .get('/api/users/1/meals')
+      .set('Authorization', `Bearer ${token}`)
       .expect(200)
       .then(({ body }) => {
         const { meals } = body;
@@ -118,6 +119,7 @@ describe.only('GET /api/users/:user_id/meals', () => {
   test('status 400: should respond with a "Bad request" error when given an invalid user_id.', () => {
     return request(app)
       .get('/api/users/abc/meals')
+      .set('Authorization', `Bearer ${token}`)
       .expect(400)
       .then(({ body }) => {
         const { msg } = body;
@@ -128,6 +130,7 @@ describe.only('GET /api/users/:user_id/meals', () => {
   test('status 404: should respond with a "Not found" error when given a valid but non-existent user_id.', () => {
     return request(app)
       .get('/api/users/100/meals')
+      .set('Authorization', `Bearer ${token}`)
       .expect(404)
       .then(({ body }) => {
         const { msg } = body;
