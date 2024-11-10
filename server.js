@@ -7,6 +7,7 @@ const { getEndpoints } = require('./controllers/api.controller.js');
 const {
   getUsers,
   getUserById,
+  getUserMeals,
   addUser,
   loginUser,
   updateUser,
@@ -28,6 +29,7 @@ app.use(cors());
 app.get('/api', getEndpoints);
 app.get('/api/users', getUsers);
 app.get('/api/users/:user_id', getUserById);
+app.get('/api/users/:user_id/meals', getUserMeals);
 app.post('/api/users', addUser);
 app.post('/api/users/login', loginUser);
 app.patch('/api/users/:user_id', verifyToken, updateUser);

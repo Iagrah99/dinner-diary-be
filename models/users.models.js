@@ -29,6 +29,27 @@ module.exports.fetchUserById = async (user_id) => {
   return user;
 };
 
+module.exports.fetchUserMeals = async (user_id) => {
+  const userExistsQuery = await checkUserIdExists(user_id);
+
+  if (!userExistsQuery) {
+    return Promise.reject({
+      status: 404,
+      msg: 'The user with the specified user_id does not exist.',
+    });
+  }
+
+  const user = (
+    await db.query('SELECT * FROM users WHERE user_id = $1', [user_id])
+  ).rows[0];
+
+  const userMeals = (
+    await db.query('SELECT * FROM meals WHERE created_by = $1', [user.username])
+  ).rows;
+
+  return userMeals;
+};
+
 module.exports.postUser = async (user) => {
   if (!user.email) {
     return Promise.reject({

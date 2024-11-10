@@ -94,6 +94,48 @@ describe('GET /api/users/:user_id', () => {
   });
 });
 
+describe.only('GET /api/users/:user_id/meals', () => {
+  test('status 200: should respond with an array of meals belonging to specified user.', () => {
+    return request(app)
+      .get('/api/users/1/meals')
+      .expect(200)
+      .then(({ body }) => {
+        const { meals } = body;
+        meals.forEach((meal) => {
+          expect(meal).toMatchObject({
+            meal_id: expect.any(Number),
+            name: expect.any(String),
+            source: expect.any(String),
+            created_by: expect.any(String),
+            image: expect.any(String),
+            rating: expect.any(Number),
+            last_eaten: expect.any(String),
+          });
+        });
+      });
+  });
+
+  test('status 400: should respond with a "Bad request" error when given an invalid user_id.', () => {
+    return request(app)
+      .get('/api/users/abc/meals')
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe('Bad request. Please provide a valid user_id.');
+      });
+  });
+
+  test('status 404: should respond with a "Not found" error when given a valid but non-existent user_id.', () => {
+    return request(app)
+      .get('/api/users/100/meals')
+      .expect(404)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe('The user with the specified user_id does not exist.');
+      });
+  });
+});
+
 describe('POST /api/users', () => {
   test('status 201: should successfully add a new user to the database and return the created user.', () => {
     return request(app)
@@ -668,7 +710,6 @@ describe('PATCH /api/users/:user_id', () => {
       .expect(200)
       .then(({ body }) => {
         const { user } = body;
-        console.log(user.date_joined);
         expect(user).toMatchObject({
           user_id: 1,
           username: 'TravelCook',

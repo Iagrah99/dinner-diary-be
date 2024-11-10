@@ -1,6 +1,7 @@
 const {
   fetchUsers,
   fetchUserById,
+  fetchUserMeals,
   postUser,
   fetchUser,
   patchUser,
@@ -22,6 +23,16 @@ module.exports.getUserById = async (req, res, next) => {
   try {
     const fetchedUser = await fetchUserById(user_id);
     res.status(200).send({ user: fetchedUser });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.getUserMeals = async (req, res, next) => {
+  const { user_id } = req.params;
+  try {
+    const userMeals = await fetchUserMeals(user_id);
+    res.status(200).send({ meals: userMeals });
   } catch (err) {
     next(err);
   }
