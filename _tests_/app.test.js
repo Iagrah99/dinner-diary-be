@@ -149,7 +149,7 @@ describe('GET /api/users/:user_id/meals', () => {
     return request(app)
       .get('/api/users/2/meals') // Changing the user_id to 2, while the logged-in user is 1
       .set('Authorization', `Bearer ${token}`) // Provide the token of user_id 1
-      .expect(403) // Expecting Forbidden status
+      .expect(403)
       .then(({ body }) => {
         const { msg } = body;
         expect(msg).toBe(
