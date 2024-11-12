@@ -5,6 +5,7 @@ const data = require('../db/data/test-data/index');
 const seed = require('../db/seed');
 const bcrypt = require('bcrypt');
 const endpoints = require('../endpoints.json');
+const jwt = require('jsonwebtoken');
 let token;
 
 afterAll(() => db.end());
@@ -14,7 +15,7 @@ beforeEach(async () => {
 
   // Log in and set the token for the current test
   const response = await request(app)
-    .post('/api/users/login')
+    .post('/api/auth/login')
     .send({
       user: {
         username: 'TravelChef',
@@ -23,6 +24,11 @@ beforeEach(async () => {
     });
 
   token = response.body.token; // Capture the token
+
+  // // Decode the token and log to verify userId is part of the token payload
+  // const decodedToken = jwt.decode(token); // Decode token
+  // console.log('Decoded Token:', decodedToken); // Log entire decoded payload
+  // console.log('Decoded userId:', decodedToken?.userId); // Log userId field
 });
 
 describe('GET /api', () => {
@@ -135,6 +141,20 @@ describe('GET /api/users/:user_id/meals', () => {
       .then(({ body }) => {
         const { msg } = body;
         expect(msg).toBe('The user with the specified user_id does not exist.');
+      });
+  });
+
+  test('status 403: should respond with a "Forbidden" error when the logged-in user tries to access another user\'s meals.', () => {
+    // Assuming logged-in user is 'user_id' 1, trying to access user_id 2's meals.
+    return request(app)
+      .get('/api/users/2/meals') // Changing the user_id to 2, while the logged-in user is 1
+      .set('Authorization', `Bearer ${token}`) // Provide the token of user_id 1
+      .expect(403) // Expecting Forbidden status
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe(
+          "Forbidden: You are not authorized to access this user's meals."
+        );
       });
   });
 });
@@ -610,10 +630,10 @@ describe('POST /api/meals', () => {
   });
 });
 
-describe('POST /api/users/login', () => {
+describe('POST /api/auth/login', () => {
   test('status 201: should respond with the user object that was created with their user details if provided correct login credentials ', () => {
     return request(app)
-      .post('/api/users/login')
+      .post('/api/auth/login')
       .send({
         user: {
           username: 'TravelChef',
@@ -635,7 +655,7 @@ describe('POST /api/users/login', () => {
 
   test('status 400: should respond with a "Bad request" error when the given username is not associated with a registered account.', () => {
     return request(app)
-      .post('/api/users/login')
+      .post('/api/auth/login')
       .send({
         user: {
           username: 'UnknownUser',
@@ -653,7 +673,7 @@ describe('POST /api/users/login', () => {
 
   test('status 400: should respond with a "Bad request" error when given an incorrect password.', () => {
     return request(app)
-      .post('/api/users/login')
+      .post('/api/auth/login')
       .send({
         user: {
           username: 'TravelChef',
@@ -669,7 +689,7 @@ describe('POST /api/users/login', () => {
 
   test('status 400: should respond with a "Bad request" error when no username is provided.', () => {
     return request(app)
-      .post('/api/users/login')
+      .post('/api/auth/login')
       .send({
         user: {
           username: '',
@@ -685,7 +705,7 @@ describe('POST /api/users/login', () => {
 
   test('status 400: should respond with a "Bad request" error when no password is provided.', () => {
     return request(app)
-      .post('/api/users/login')
+      .post('/api/auth/login')
       .send({
         user: {
           username: 'TravelChef',

@@ -31,14 +31,7 @@ module.exports.addMeal = async (req, res, next) => {
   const { meal } = req.body;
   try {
     const addedMeal = await postMeal(meal);
-    jwt.verify(req.token, process.env.JWT_SECRET, (err, authData) => {
-      if (err) {
-        console.log(err);
-        res.status(403).send();
-      } else {
-        res.status(201).send({ meal: addedMeal, authData });
-      }
-    });
+    res.status(201).send({ meal: addedMeal, user: req.user });
   } catch (err) {
     next(err);
   }

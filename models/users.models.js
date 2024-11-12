@@ -29,9 +29,15 @@ module.exports.fetchUserById = async (user_id) => {
   return user;
 };
 
-module.exports.fetchUserMeals = async (user_id) => {
-  const userExistsQuery = await checkUserIdExists(user_id);
+module.exports.fetchUserMeals = async (requestedUserId, loggedInUserId) => {
+  if (isNaN(requestedUserId)) {
+    return Promise.reject({
+      status: 400,
+      msg: 'Bad request. Please provide a valid user_id.',
+    });
+  }
 
+  const userExistsQuery = await checkUserIdExists(requestedUserId);
   if (!userExistsQuery) {
     return Promise.reject({
       status: 404,
@@ -39,10 +45,20 @@ module.exports.fetchUserMeals = async (user_id) => {
     });
   }
 
+  // If the logged-in user is trying to access a different user's meals, throw a 403 error
+  if (Number(requestedUserId) !== loggedInUserId) {
+    return Promise.reject({
+      status: 403,
+      msg: "Forbidden: You are not authorized to access this user's meals.",
+    });
+  }
+
+  // Fetch the requested user's meals from the database
   const user = (
-    await db.query('SELECT * FROM users WHERE user_id = $1', [user_id])
+    await db.query('SELECT * FROM users WHERE user_id = $1', [requestedUserId])
   ).rows[0];
 
+  // Fetch meals created by the user
   const userMeals = (
     await db.query('SELECT * FROM meals WHERE created_by = $1', [user.username])
   ).rows;

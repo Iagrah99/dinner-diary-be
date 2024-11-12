@@ -28,11 +28,13 @@ module.exports.getUserById = async (req, res, next) => {
   }
 };
 
-module.exports.getUserMeals = async (req, res, next) => {
+exports.getUserMeals = async (req, res, next) => {
   const { user_id } = req.params;
+  const { user } = req;
+
   try {
-    const userMeals = await fetchUserMeals(user_id);
-    res.status(200).send({ meals: userMeals });
+    const meals = await fetchUserMeals(user_id, user.userId);
+    res.status(200).send({ meals });
   } catch (err) {
     next(err);
   }
@@ -51,18 +53,23 @@ module.exports.addUser = async (req, res, next) => {
 module.exports.loginUser = async (req, res, next) => {
   const { user } = req.body;
   try {
+    // Fetch the user details
     const fetchedUser = await fetchUser(user.username, user.password);
-    jwt.sign(
-      { user: fetchedUser },
-      `${process.env.JWT_SECRET}`,
-      { expiresIn: '3 days' },
-      (err, token) => {
-        if (err) {
-          return next(err);
-        }
-        res.status(201).send({ user: fetchedUser, token });
+
+    // Create a payload for the JWT, including the 'user_id'
+    const payload = {
+      username: fetchedUser.username,
+      userId: fetchedUser.user_id, // Add the user_id to the payload
+    };
+
+    // Sign the token with the payload including 'user_id'
+    jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, (err, token) => {
+      if (err) {
+        return next(err);
       }
-    );
+      // Send the token and user info in the response
+      res.status(201).send({ user: fetchedUser, token });
+    });
   } catch (err) {
     next(err);
   }
