@@ -100,6 +100,28 @@ describe('GET /api/users/:user_id', () => {
   });
 });
 
+describe('GET /api/usernames/:username', () => {
+  test('status 200: should respond with a success message saying the username is avaliable if the user does not exist.', () => {
+    return request(app)
+      .get('/api/usernames/Jane')
+      .expect(200)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe('Username is not taken');
+      });
+  });
+
+  test('status 200: should respond with an error message saying the username is not avaliable if the user does exist.', () => {
+    return request(app)
+      .get('/api/usernames/TravelChef')
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe('Username is taken');
+      });
+  });
+});
+
 describe('GET /api/users/:user_id/meals', () => {
   test('status 200: should respond with an array of meals belonging to specified user.', () => {
     return request(app)

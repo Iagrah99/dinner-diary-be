@@ -29,6 +29,19 @@ module.exports.fetchUserById = async (user_id) => {
   return user;
 };
 
+module.exports.fetchUsername = async (username) => {
+  const usernameTaken = await checkUsernameExists(username);
+
+  if (usernameTaken) {
+    return Promise.reject({
+      status: 400,
+      msg: 'Username is taken',
+    });
+  }
+
+  return usernameTaken;
+};
+
 module.exports.fetchUserMeals = async (requestedUserId, loggedInUserId) => {
   if (isNaN(requestedUserId)) {
     return Promise.reject({
