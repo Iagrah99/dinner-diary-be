@@ -2,6 +2,7 @@ const {
   fetchUsers,
   fetchUserById,
   fetchUsername,
+  fetchEmail,
   fetchUserMeals,
   postUser,
   fetchUser,
@@ -34,6 +35,16 @@ module.exports.getUserByUsername = async (req, res, next) => {
   try {
     await fetchUsername(username);
     res.status(200).send({ msg: 'Username is not taken' });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.getUserByEmail = async (req, res, next) => {
+  const { email } = req.params;
+  try {
+    await fetchEmail(email);
+    res.status(200).send({ msg: 'Email is not taken' });
   } catch (err) {
     next(err);
   }

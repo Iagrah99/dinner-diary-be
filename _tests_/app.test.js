@@ -111,13 +111,35 @@ describe('GET /api/usernames/:username', () => {
       });
   });
 
-  test('status 200: should respond with an error message saying the username is not avaliable if the user does exist.', () => {
+  test('status 400: should respond with an error message saying the username is not avaliable if the user does exist.', () => {
     return request(app)
       .get('/api/usernames/TravelChef')
       .expect(400)
       .then(({ body }) => {
         const { msg } = body;
         expect(msg).toBe('Username is taken');
+      });
+  });
+});
+
+describe('GET /api/emails/:email', () => {
+  test('status 200: should respond with a success nessage if the specified email is avaliable.', () => {
+    return request(app)
+      .get('/api/emails/newuser@example.com')
+      .expect(200)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe('Email is not taken');
+      });
+  });
+
+  test('status 400: should respond with an error message if the specified email is not avaliable.', () => {
+    return request(app)
+      .get('/api/emails/travel_chef@example.com')
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe('Email is taken');
       });
   });
 });

@@ -42,6 +42,19 @@ module.exports.fetchUsername = async (username) => {
   return usernameTaken;
 };
 
+module.exports.fetchEmail = async (email) => {
+  const emailTaken = await checkEmailExists(email);
+
+  if (emailTaken) {
+    return Promise.reject({
+      status: 400,
+      msg: 'Email is taken',
+    });
+  }
+
+  return emailTaken;
+};
+
 module.exports.fetchUserMeals = async (requestedUserId, loggedInUserId) => {
   if (isNaN(requestedUserId)) {
     return Promise.reject({
