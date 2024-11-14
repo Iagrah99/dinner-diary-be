@@ -75,6 +75,7 @@ describe('GET /api/users/:user_id', () => {
           email: 'travel_chef@example.com',
           username: 'TravelChef',
           avatar: 'https://i.ibb.co/xfwj2n4/test-avatar-2.png',
+          date_joined: '2024-11-08T00:00:00.000Z',
         });
       });
   });
@@ -1065,10 +1066,31 @@ describe('DELETE /api/users/:user_id', () => {
       });
   });
 
+  test('status 400: should respond with a "Bad request" error when given no password.', () => {
+    return request(app)
+      .delete('/api/users/3')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        user: {
+          password: '',
+        },
+      })
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe('Please provide a password.');
+      });
+  });
+
   test('status 400: should respond with a "Bad request" error when given an invalid user_id.', () => {
     return request(app)
       .delete('/api/users/asdf')
       .set('Authorization', `Bearer ${token}`)
+      .send({
+        user: {
+          password: 'coding_and_cooking789',
+        },
+      })
       .expect(400)
       .then(({ body }) => {
         const { msg } = body;

@@ -66,7 +66,18 @@ module.exports.addUser = async (req, res, next) => {
   const { user } = req.body;
   try {
     const newUser = await postUser(user);
-    res.status(201).send({ user: newUser });
+
+    const payload = {
+      username: newUser.username,
+      userId: newUser.user_id, // Add the user_id to the payload
+    };
+
+    jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, (err, token) => {
+      if (err) {
+        return next(err);
+      }
+      res.status(201).send({ user: newUser, token });
+    });
   } catch (err) {
     next(err);
   }
