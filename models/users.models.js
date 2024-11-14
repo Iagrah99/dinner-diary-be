@@ -55,7 +55,18 @@ module.exports.fetchEmail = async (email) => {
   return emailTaken;
 };
 
-module.exports.fetchUserMeals = async (requestedUserId, loggedInUserId) => {
+module.exports.fetchUserMeals = async (
+  requestedUserId,
+  loggedInUserId,
+  sort_by = 'last_eaten',
+  order_by = 'ASC'
+) => {
+  const validSortByQueries = ['last_eaten', 'name', 'source', 'rating'];
+
+  if (!validSortByQueries.includes(sort_by)) {
+    return Promise.reject({ status: 400, msg: 'Invalid sort by query' });
+  }
+
   if (isNaN(requestedUserId)) {
     return Promise.reject({
       status: 400,
@@ -86,7 +97,10 @@ module.exports.fetchUserMeals = async (requestedUserId, loggedInUserId) => {
 
   // Fetch meals created by the user
   const userMeals = (
-    await db.query('SELECT * FROM meals WHERE created_by = $1', [user.username])
+    await db.query(
+      `SELECT * FROM meals WHERE created_by = $1 ORDER BY ${sort_by} ${order_by}`,
+      [user.username]
+    )
   ).rows;
 
   return userMeals;

@@ -53,9 +53,10 @@ module.exports.getUserByEmail = async (req, res, next) => {
 exports.getUserMeals = async (req, res, next) => {
   const { user_id } = req.params;
   const { user } = req;
+  const { sort_by, order_by } = req.query;
 
   try {
-    const meals = await fetchUserMeals(user_id, user.userId);
+    const meals = await fetchUserMeals(user_id, user.userId, sort_by, order_by);
     res.status(200).send({ meals });
   } catch (err) {
     next(err);

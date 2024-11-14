@@ -145,7 +145,7 @@ describe('GET /api/emails/:email', () => {
   });
 });
 
-describe('GET /api/users/:user_id/meals', () => {
+describe.only('GET /api/users/:user_id/meals', () => {
   test('status 200: should respond with an array of meals belonging to specified user.', () => {
     return request(app)
       .get('/api/users/1/meals')
@@ -164,6 +164,50 @@ describe('GET /api/users/:user_id/meals', () => {
             last_eaten: expect.any(String),
           });
         });
+      });
+  });
+
+  test('status 200: should respond with an array of meal objects sorted by their date in descending order.', () => {
+    return request(app)
+      .get('/api/users/1/meals')
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
+      .then(({ body }) => {
+        const { meals } = body;
+        expect(meals).toBeSortedBy('last_eaten', { ascending: true });
+      });
+  });
+
+  test('status 200: should sort meals by specified sort_by query', () => {
+    return request(app)
+      .get('/api/users/1/meals?sort_by=rating')
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
+      .then(({ body }) => {
+        const { meals } = body;
+        expect(meals).toBeSortedBy('rating');
+      });
+  });
+
+  test('status 200: should order meals by the specified order_by query', () => {
+    return request(app)
+      .get('/api/users/1/meals?order_by=DESC')
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200)
+      .then(({ body }) => {
+        const { meals } = body;
+        expect(meals).toBeSorted({ descending: true });
+      });
+  });
+
+  test('status 400: should respond with a "bad request" error when given an invalid sort_by query.', () => {
+    return request(app)
+      .get('/api/users/1/meals?sort_by=ingredients')
+      .set('Authorization', `Bearer ${token}`)
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe('Invalid sort by query');
       });
   });
 
