@@ -145,7 +145,7 @@ describe('GET /api/emails/:email', () => {
   });
 });
 
-describe.only('GET /api/users/:user_id/meals', () => {
+describe('GET /api/users/:user_id/meals', () => {
   test('status 200: should respond with an array of meals belonging to specified user.', () => {
     return request(app)
       .get('/api/users/1/meals')
@@ -560,7 +560,7 @@ describe('POST /api/meals', () => {
       .then(({ body }) => {
         const { meal } = body;
         expect(meal).toMatchObject({
-          meal_id: 4,
+          meal_id: 10,
           name: 'Spaghetti Bolognese',
           ingredients: [
             'spaghetti',
