@@ -123,24 +123,58 @@ describe('GET /api/usernames/:username', () => {
   });
 });
 
-describe('GET /api/emails/:email', () => {
-  test('status 200: should respond with a success nessage if the specified email is avaliable.', () => {
+describe('POST /api/emails/:email', () => {
+  test('status 201: should respond with a success nessage if the specified email is avaliable for registration.', () => {
     return request(app)
-      .get('/api/emails/newuser@example.com')
-      .expect(200)
+      .post('/api/emails/newuser@example.com')
+      .send({
+        check: 'registration',
+      })
+      .expect(201)
       .then(({ body }) => {
         const { msg } = body;
         expect(msg).toBe('Email is not taken');
       });
   });
 
+  test('status 201: should respond with a success nessage if the specified email is associated with an account for password reset requests.', () => {
+    return request(app)
+      .post('/api/emails/travel_chef@example.com')
+      .send({
+        check: 'reset_password',
+      })
+      .expect(201)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe(
+          'An email with instructions was sent to your account.'
+        );
+      });
+  });
+
   test('status 400: should respond with an error message if the specified email is not avaliable.', () => {
     return request(app)
-      .get('/api/emails/travel_chef@example.com')
+      .post('/api/emails/travel_chef@example.com')
+      .send({
+        check: 'registration',
+      })
       .expect(400)
       .then(({ body }) => {
         const { msg } = body;
         expect(msg).toBe('Email is taken');
+      });
+  });
+
+  test('status 400: should respond with an error message if the specified email is not avaliable.', () => {
+    return request(app)
+      .post('/api/emails/janedoe@email.com')
+      .send({
+        check: 'reset_password',
+      })
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe('This email is not associated with any accounts.');
       });
   });
 });

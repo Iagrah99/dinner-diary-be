@@ -9,7 +9,7 @@ const mealRoutes = require('./routes/mealRoutes.js');
 const { psqlError, customError } = require('./middlewares/errorHandling.js');
 const {
   getUserByUsername,
-  getUserByEmail,
+  checkUserByEmail,
 } = require('./controllers/users.controllers.js');
 
 const app = express();
@@ -21,7 +21,7 @@ app.get('/api', getEndpoints);
 app.use('/api/users', userRoutes);
 app.use('/api/meals', mealRoutes);
 app.get('/api/usernames/:username', getUserByUsername);
-app.get('/api/emails/:email', getUserByEmail);
+app.post('/api/emails/:email', checkUserByEmail);
 
 app.use(psqlError);
 app.use(customError);

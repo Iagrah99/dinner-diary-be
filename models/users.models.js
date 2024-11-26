@@ -42,17 +42,28 @@ module.exports.fetchUsername = async (username) => {
   return usernameTaken;
 };
 
-module.exports.fetchEmail = async (email) => {
+module.exports.fetchEmail = async (email, check) => {
   const emailTaken = await checkEmailExists(email);
 
-  if (emailTaken) {
+  if (emailTaken && check === 'registration') {
     return Promise.reject({
       status: 400,
       msg: 'Email is taken',
     });
   }
 
-  return emailTaken;
+  if (!emailTaken && check === 'reset_password') {
+    return Promise.reject({
+      status: 400,
+      msg: 'This email is not associated with any accounts.',
+    });
+  }
+
+  if (check === 'reset_password') {
+    return 'An email with instructions was sent to your account.';
+  } else if (check === 'registration') {
+    return 'Email is not taken';
+  }
 };
 
 module.exports.fetchUserMeals = async (

@@ -40,11 +40,12 @@ module.exports.getUserByUsername = async (req, res, next) => {
   }
 };
 
-module.exports.getUserByEmail = async (req, res, next) => {
+module.exports.checkUserByEmail = async (req, res, next) => {
   const { email } = req.params;
+  const { check } = req.body;
   try {
-    await fetchEmail(email);
-    res.status(200).send({ msg: 'Email is not taken' });
+    const msg = await fetchEmail(email, check);
+    res.status(201).send({ msg });
   } catch (err) {
     next(err);
   }
