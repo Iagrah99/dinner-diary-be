@@ -61,7 +61,8 @@ module.exports.fetchEmail = async (email, check) => {
 
   if (check === 'reset_password') {
     return 'An email with instructions was sent to your account.';
-  } else if (check === 'registration') {
+  }
+  if (check === 'registration') {
     return 'Email is not taken';
   }
 };

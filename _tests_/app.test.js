@@ -165,7 +165,7 @@ describe('POST /api/emails/:email', () => {
       });
   });
 
-  test('status 400: should respond with an error message if the specified email is not avaliable.', () => {
+  test('status 400: should respond with an error message if the specified email is not associated with an account.', () => {
     return request(app)
       .post('/api/emails/janedoe@email.com')
       .send({
