@@ -208,7 +208,7 @@ describe('GET /api/users/:user_id/meals', () => {
       .expect(200)
       .then(({ body }) => {
         const { meals } = body;
-        expect(meals).toBeSortedBy('last_eaten', { ascending: true });
+        expect(meals).toBeSortedBy('last_eaten', { descending: true });
       });
   });
 
@@ -219,18 +219,18 @@ describe('GET /api/users/:user_id/meals', () => {
       .expect(200)
       .then(({ body }) => {
         const { meals } = body;
-        expect(meals).toBeSortedBy('rating');
+        expect(meals).toBeSortedBy('rating', { descending: true });
       });
   });
 
   test('status 200: should order meals by the specified order_by query', () => {
     return request(app)
-      .get('/api/users/1/meals?order_by=DESC')
+      .get('/api/users/1/meals?order_by=ASC')
       .set('Authorization', `Bearer ${token}`)
       .expect(200)
       .then(({ body }) => {
         const { meals } = body;
-        expect(meals).toBeSorted({ descending: true });
+        expect(meals).toBeSorted({ ascending: true });
       });
   });
 

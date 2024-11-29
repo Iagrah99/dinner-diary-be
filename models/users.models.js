@@ -71,7 +71,7 @@ module.exports.fetchUserMeals = async (
   requestedUserId,
   loggedInUserId,
   sort_by = 'last_eaten',
-  order_by = 'ASC'
+  order_by = 'DESC'
 ) => {
   const validSortByQueries = ['last_eaten', 'name', 'source', 'rating'];
 
