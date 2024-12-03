@@ -137,6 +137,12 @@ module.exports.patchMeal = async (meal, meal_id) => {
     queryIndex++;
   }
 
+  if (meal.last_eaten) {
+    query += `last_eaten = $${queryIndex}, `;
+    queryParams.push(meal.last_eaten);
+    queryIndex++;
+  }
+
   query = query.slice(0, -2);
 
   query += ` WHERE meal_id = $${queryIndex} RETURNING *;`;

@@ -1082,6 +1082,37 @@ describe('PATCH /api/meals/:meal_id', () => {
       });
   });
 
+  test.only("status 200: should successfully update the meal's last eaten date, leaving the other properties unchanged.", () => {
+    return request(app)
+      .patch('/api/meals/1')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        meal: {
+          last_eaten: '2024-12-03',
+        },
+      })
+      .expect(200)
+      .then(({ body }) => {
+        const { meal } = body;
+        expect(meal).toMatchObject({
+          meal_id: 1,
+          name: 'Lentil Soup',
+          ingredients: [
+            'lentils',
+            'carrots',
+            'celery',
+            'garlic',
+            'vegetable broth',
+          ],
+          source: 'HealthyHeartyMeals.com',
+          created_by: 'VeganGuru',
+          image: 'https://i.ibb.co/k0NdDHF/Lentil-Soup.png',
+          rating: 3.5,
+          last_eaten: '2024-12-03T00:00:00.000Z',
+        });
+      });
+  });
+
   test('status 400: should respond with a "Bad request" error when given an invalid meal_id.', () => {
     return request(app)
       .patch('/api/meals/asdf')

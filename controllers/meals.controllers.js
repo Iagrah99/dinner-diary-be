@@ -42,6 +42,7 @@ module.exports.updateMeal = async (req, res, next) => {
   const { meal_id } = req.params;
   try {
     const updatedMeal = await patchMeal(meal, meal_id);
+    console.log(updatedMeal.last_eaten);
     res.status(200).send({ meal: updatedMeal });
   } catch (err) {
     next(err);
