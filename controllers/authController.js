@@ -14,7 +14,7 @@ exports.loginUser = async (req, res, next) => {
     const token = jwt.sign(
       { userId: fetchedUser.user_id, username: fetchedUser.username }, // Use fetchedUser.user_id here
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: '5s' }
+      { expiresIn: '3 days' }
     );
 
     // Return user info along with token
