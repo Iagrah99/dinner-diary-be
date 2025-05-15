@@ -23,7 +23,7 @@ beforeEach(async () => {
       },
     });
 
-  token = response.body.token; // Capture the token
+  token = response.body.token; // Capture the token.
 
   // // Decode the token and log to verify userId is part of the token payload
   // const decodedToken = jwt.decode(token); // Decode token
